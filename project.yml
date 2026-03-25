@@ -1,0 +1,99 @@
+name: FastFlow
+options:
+  bundleIdPrefix: com.lightingTech
+  deploymentTarget:
+    iOS: "17.0"
+packages:
+  GoogleMobileAds:
+    url: https://github.com/googleads/swift-package-manager-google-mobile-ads.git
+    from: 12.14.0
+  RevenueCat:
+    url: https://github.com/RevenueCat/purchases-ios-spm.git
+    from: 5.0.0
+  UserMessagingPlatform:
+    url: https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git
+    from: 3.1.0
+settings:
+  base:
+    PRODUCT_BUNDLE_IDENTIFIER: com.lightingTech.fastflow
+    PRODUCT_NAME: FastFlow
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+targets:
+  FastFlow:
+    type: application
+    platform: iOS
+    sources:
+      - path: .
+        includes:
+          - "*.swift"
+        excludes:
+          - "*.xcodeproj"
+          - "*.xcworkspace"
+          - project.yml
+          - Info.plist
+          - analyze_image.swift
+          - logo_cleanup.swift
+          - 原型图html参考
+          - "*.md"
+          - Resources
+      - path: Assets.xcassets
+      - path: Resources
+    info:
+      path: Info.plist
+      properties:
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        GADApplicationIdentifier: $(FASTFLOW_GAD_APPLICATION_IDENTIFIER)
+        FastFlowAdInventoryDefaultMode: $(FASTFLOW_AD_INVENTORY_DEFAULT_MODE)
+        FastFlowHistoryNativeAdUnitID: $(FASTFLOW_ADMOB_HISTORY_NATIVE_UNIT_ID)
+        FastFlowInsightsNativeAdUnitID: $(FASTFLOW_ADMOB_INSIGHTS_NATIVE_UNIT_ID)
+        FastFlowRevenueCatAPIKey: $(FASTFLOW_REVENUECAT_API_KEY)
+        FastFlowRevenueCatEntitlementID: $(FASTFLOW_REVENUECAT_ENTITLEMENT_ID)
+        SKAdNetworkItems:
+          - SKAdNetworkIdentifier: cstr6suwn9.skadnetwork
+        UILaunchScreen:
+          UIColorName: ""
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+    dependencies:
+      - package: GoogleMobileAds
+        product: GoogleMobileAds
+      - package: RevenueCat
+        product: RevenueCat
+      - package: UserMessagingPlatform
+        product: GoogleUserMessagingPlatform
+    settings:
+      base:
+        INFOPLIST_FILE: Info.plist
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: P4U4BC35AW
+      configs:
+        Debug:
+          FASTFLOW_GAD_APPLICATION_IDENTIFIER: ca-app-pub-3940256099942544~1458002511
+          FASTFLOW_AD_INVENTORY_DEFAULT_MODE: test
+          FASTFLOW_ADMOB_HISTORY_NATIVE_UNIT_ID: ca-app-pub-3940256099942544/3986624511
+          FASTFLOW_ADMOB_INSIGHTS_NATIVE_UNIT_ID: ca-app-pub-3940256099942544/3986624511
+          FASTFLOW_REVENUECAT_API_KEY: appl_WQdoTZSRKQMIovATGtmZiLCbrcL
+          FASTFLOW_REVENUECAT_ENTITLEMENT_ID: "FastFlow Pro"
+        Release:
+          FASTFLOW_GAD_APPLICATION_IDENTIFIER: ca-app-pub-2900826220475310~8147479796
+          FASTFLOW_AD_INVENTORY_DEFAULT_MODE: live
+          FASTFLOW_ADMOB_HISTORY_NATIVE_UNIT_ID: ca-app-pub-2900826220475310/9133258403
+          FASTFLOW_ADMOB_INSIGHTS_NATIVE_UNIT_ID: ca-app-pub-2900826220475310/3423568477
+          FASTFLOW_REVENUECAT_API_KEY: appl_WQdoTZSRKQMIovATGtmZiLCbrcL
+          FASTFLOW_REVENUECAT_ENTITLEMENT_ID: "FastFlow Pro"
+    scheme:
+      gatherCoverageData: false
+      testTargets: []

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FastFlow - 01 Timer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#ec5b13",
+          "background-dark": "#0F0F0F",
+          "card-dark": "#1C1C1E",
+        },
+        fontFamily: { "display": ["Public Sans", "sans-serif"] },
+      },
+    },
+  }
+</script>
+<style>
+  body { font-family: 'Public Sans', sans-serif; -webkit-font-smoothing: antialiased; min-height: max(884px, 100dvh); }
+  .progress-ring-circle { transition: stroke-dashoffset 0.35s; transform: rotate(-90deg); transform-origin: 50% 50%; }
+</style>
+</head>
+<body class="dark bg-background-dark text-slate-100 min-h-screen flex flex-col">
+
+<!-- Top Navigation Bar -->
+<nav class="flex items-center justify-between px-6 py-4 bg-background-dark sticky top-0 z-50">
+  <div class="flex items-center gap-2">
+    <div class="bg-primary p-1.5 rounded-lg flex items-center justify-center">
+      <span class="material-symbols-outlined text-white text-2xl">bolt</span>
+    </div>
+    <h1 class="text-xl font-bold tracking-tight">FastFlow</h1>
+  </div>
+  <button class="p-2 rounded-full hover:bg-card-dark transition-colors">
+    <span class="material-symbols-outlined">settings</span>
+  </button>
+</nav>
+
+<!-- Main Content -->
+<main class="flex-1 flex flex-col items-center px-6 pt-8 pb-32 max-w-md mx-auto w-full">
+
+  <!-- Circular Progress Ring -->
+  <div class="relative flex items-center justify-center mb-12">
+    <svg class="w-72 h-72">
+      <circle class="text-slate-800" cx="144" cy="144" fill="transparent" r="128" stroke="currentColor" stroke-width="16"></circle>
+      <circle class="progress-ring-circle" cx="144" cy="144" fill="transparent" r="128"
+        stroke="url(#gradient)" stroke-dasharray="804" stroke-dashoffset="200" stroke-linecap="round" stroke-width="16"></circle>
+      <defs>
+        <linearGradient id="gradient" x1="0%" x2="100%" y1="0%" y2="0%">
+          <stop offset="0%" style="stop-color:#ec5b13;stop-opacity:1"></stop>
+          <stop offset="100%" style="stop-color:#ff8c42;stop-opacity:1"></stop>
+        </linearGradient>
+      </defs>
+    </svg>
+    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+      <span class="text-3xl mb-1">🔥</span>
+      <span class="text-xs uppercase tracking-widest font-semibold text-slate-400">Fat Burning</span>
+      <div class="text-5xl font-bold tracking-tight mb-2 tabular-nums mt-2">14:32:10</div>
+      <div class="text-sm font-medium text-slate-500">1h 28m remaining</div>
+    </div>
+  </div>
+
+  <!-- Phase Progress Bar -->
+  <div class="w-full mb-12 bg-card-dark p-6 rounded-2xl shadow-sm">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500">Fast Phases</h3>
+      <span class="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">Stage 3 of 6</span>
+    </div>
+    <div class="flex gap-1.5 h-1.5 w-full mb-4">
+      <div class="flex-1 bg-primary rounded-full"></div>
+      <div class="flex-1 bg-primary rounded-full"></div>
+      <div class="flex-1 bg-primary rounded-full"></div>
+      <div class="flex-1 bg-slate-700 rounded-full"></div>
+      <div class="flex-1 bg-slate-700 rounded-full"></div>
+      <div class="flex-1 bg-slate-700 rounded-full"></div>
+    </div>
+    <div class="flex justify-between">
+      <div class="flex flex-col items-center opacity-40"><span class="material-symbols-outlined text-sm">check_circle</span><span class="text-[10px] mt-1 font-medium">Start</span></div>
+      <div class="flex flex-col items-center opacity-40"><span class="material-symbols-outlined text-sm">check_circle</span><span class="text-[10px] mt-1 font-medium">Sugar</span></div>
+      <div class="flex flex-col items-center text-primary"><span class="material-symbols-outlined text-sm">local_fire_department</span><span class="text-[10px] mt-1 font-bold">Fat Burn</span></div>
+      <div class="flex flex-col items-center opacity-40"><span class="material-symbols-outlined text-sm">lock</span><span class="text-[10px] mt-1 font-medium">Ketosis</span></div>
+      <div class="flex flex-col items-center opacity-40"><span class="material-symbols-outlined text-sm">lock</span><span class="text-[10px] mt-1 font-medium">Autophagy</span></div>
+      <div class="flex flex-col items-center opacity-40"><span class="material-symbols-outlined text-sm">lock</span><span class="text-[10px] mt-1 font-medium">Deep</span></div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="w-full flex gap-4">
+    <button class="flex-1 py-4 px-6 border-2 border-primary text-primary font-bold rounded-xl transition-all active:scale-95">End Fast</button>
+    <button class="flex-1 py-4 px-6 bg-card-dark text-red-500 font-bold rounded-xl transition-all active:scale-95">Give Up</button>
+  </div>
+
+</main>
+
+<!-- Bottom Tab Bar -->
+<div class="fixed bottom-0 left-0 right-0 z-50">
+  <div class="max-w-md mx-auto bg-card-dark/90 backdrop-blur-xl border-t border-slate-800 px-6 pt-3 pb-8 flex justify-between items-center">
+    <a class="flex flex-col items-center gap-1 text-primary" href="01_timer.html"><span class="material-symbols-outlined">timer</span><span class="text-[10px] font-bold">Timer</span></a>
+    <a class="flex flex-col items-center gap-1 text-slate-500 hover:text-primary" href="04_history.html"><span class="material-symbols-outlined">calendar_month</span><span class="text-[10px]">History</span></a>
+    <a class="flex flex-col items-center gap-1 text-slate-500 hover:text-primary" href="03_stats.html"><span class="material-symbols-outlined">bar_chart</span><span class="text-[10px]">Stats</span></a>
+    <a class="flex flex-col items-center gap-1 text-slate-500 hover:text-primary" href="06_settings.html"><span class="material-symbols-outlined">settings</span><span class="text-[10px]">Settings</span></a>
+  </div>
+</div>
+
+</body>
+</html>

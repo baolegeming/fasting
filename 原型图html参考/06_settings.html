@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FastFlow - 06 Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#ec5b13",
+          "background-dark": "#0F0F0F",
+          "card-dark": "#1C1C1E",
+        },
+        fontFamily: { "display": ["Public Sans"] },
+      },
+    },
+  }
+</script>
+<style>
+  body { font-family: 'Public Sans', sans-serif; min-height: max(884px, 100dvh); }
+  .toggle { width: 44px; height: 26px; background: #ec5b13; border-radius: 13px; position: relative; }
+  .toggle::after { content: ''; position: absolute; top: 3px; right: 3px; width: 20px; height: 20px; background: white; border-radius: 50%; }
+  .toggle-off { background: #3a3a3c; }
+  .toggle-off::after { right: auto; left: 3px; }
+  .row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #2c2c2e; }
+  .row:last-child { border-bottom: none; }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: #8e8e93; text-transform: uppercase; padding: 20px 0 8px; }
+</style>
+</head>
+<body class="dark bg-background-dark text-slate-100 min-h-screen flex flex-col">
+
+<!-- Header -->
+<header class="flex items-center p-4 sticky top-0 bg-background-dark z-10 border-b border-slate-800">
+  <a href="01_timer.html" class="mr-4">
+    <span class="material-symbols-outlined text-primary">arrow_back_ios</span>
+  </a>
+  <h1 class="text-lg font-bold tracking-tight">Settings</h1>
+</header>
+
+<main class="flex-1 px-4 pb-28">
+
+  <!-- PLAN -->
+  <div class="section-label">Plan</div>
+  <div class="bg-card-dark rounded-xl px-4">
+    <div class="row">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary text-xl">timer</span>
+        <span class="text-sm font-medium">Current Plan</span>
+      </div>
+      <div class="flex items-center gap-1 text-slate-400">
+        <span class="text-sm">16:8</span>
+        <span class="material-symbols-outlined text-slate-600" style="font-size:18px">chevron_right</span>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-primary text-xl">notifications</span>
+          <span class="text-sm font-medium">Start Reminder</span>
+        </div>
+        <p class="text-xs text-slate-500 ml-9">Daily at 20:00</p>
+      </div>
+      <div class="toggle"></div>
+    </div>
+  </div>
+
+  <!-- NOTIFICATIONS -->
+  <div class="section-label">Notifications</div>
+  <div class="bg-card-dark rounded-xl px-4">
+    <div class="row">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary text-xl">trending_up</span>
+        <span class="text-sm font-medium">Phase Milestone Alerts</span>
+      </div>
+      <div class="toggle"></div>
+    </div>
+    <div class="row">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary text-xl">hourglass_bottom</span>
+        <span class="text-sm font-medium">1 Hour Remaining</span>
+      </div>
+      <div class="toggle"></div>
+    </div>
+  </div>
+
+  <!-- SUBSCRIPTION -->
+  <div class="section-label">Subscription</div>
+  <div class="bg-card-dark rounded-xl px-4">
+    <div class="row">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary text-xl">star</span>
+        <span class="text-sm font-medium">Status</span>
+      </div>
+      <span class="text-xs font-bold text-green-400 bg-green-400/10 px-2 py-1 rounded-full">Pro · Active</span>
+    </div>
+    <div class="row">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary text-xl">refresh</span>
+        <span class="text-sm font-medium">Restore Purchase</span>
+      </div>
+      <span class="material-symbols-outlined text-slate-600" style="font-size:18px">chevron_right</span>
+    </div>
+  </div>
+
+  <!-- DATA MANAGEMENT -->
+  <div class="section-label">Data Management</div>
+  <div class="bg-card-dark rounded-xl px-4">
+    <div class="row">
+      <div>
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-primary text-xl">cloud</span>
+          <span class="text-sm font-medium">iCloud Backup</span>
+        </div>
+        <p class="text-xs text-slate-500 ml-9">Last backed up: Today, 09:41</p>
+      </div>
+    </div>
+    <div class="row border-none">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary text-xl">cloud_upload</span>
+        <span class="text-sm font-medium text-primary font-semibold">Backup Now</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="section-label">About</div>
+  <div class="bg-card-dark rounded-xl px-4">
+    <div class="row">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary text-xl">star_rate</span>
+        <span class="text-sm font-medium">Rate FastFlow</span>
+      </div>
+      <span class="material-symbols-outlined text-slate-600" style="font-size:18px">chevron_right</span>
+    </div>
+    <div class="row">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary text-xl">shield</span>
+        <span class="text-sm font-medium">Privacy Policy</span>
+      </div>
+      <span class="material-symbols-outlined text-slate-600" style="font-size:18px">chevron_right</span>
+    </div>
+    <div class="row">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary text-xl">description</span>
+        <span class="text-sm font-medium">Terms of Service</span>
+      </div>
+      <span class="material-symbols-outlined text-slate-600" style="font-size:18px">chevron_right</span>
+    </div>
+    <div class="row border-none">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary text-xl">info</span>
+        <span class="text-sm font-medium">Version</span>
+      </div>
+      <span class="text-sm text-slate-500">2.4.1 (882)</span>
+    </div>
+  </div>
+
+</main>
+
+<!-- Bottom Tab Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-card-dark border-t border-slate-800 px-4 py-2 flex justify-around items-center z-20">
+  <a class="flex flex-col items-center gap-1 p-2 text-slate-400" href="01_timer.html"><span class="material-symbols-outlined">schedule</span><span class="text-[10px]">Timer</span></a>
+  <a class="flex flex-col items-center gap-1 p-2 text-slate-400" href="04_history.html"><span class="material-symbols-outlined">calendar_month</span><span class="text-[10px]">History</span></a>
+  <a class="flex flex-col items-center gap-1 p-2 text-slate-400" href="03_stats.html"><span class="material-symbols-outlined">bar_chart</span><span class="text-[10px]">Stats</span></a>
+  <a class="flex flex-col items-center gap-1 p-2 text-primary" href="06_settings.html"><span class="material-symbols-outlined">settings</span><span class="text-[10px] font-bold">Settings</span></a>
+</nav>
+
+</body>
+</html>

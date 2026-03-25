@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FastFlow - 04 History</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#ec5b13",
+          "background-dark": "#221610",
+        },
+        fontFamily: { "display": ["Public Sans"] },
+      },
+    },
+  }
+</script>
+<style>
+  body { font-family: 'Public Sans', sans-serif; min-height: max(884px, 100dvh); }
+</style>
+</head>
+<body class="dark bg-background-dark text-slate-100 min-h-screen flex flex-col">
+
+<!-- Header + Strip Calendar -->
+<header class="bg-background-dark border-b border-primary/10 sticky top-0 z-10">
+  <div class="p-4 flex items-center justify-between">
+    <h1 class="text-xl font-bold">History</h1>
+    <button class="p-2 rounded-full hover:bg-primary/10">
+      <span class="material-symbols-outlined text-primary">calendar_add_on</span>
+    </button>
+  </div>
+
+  <!-- 7-Day Strip Calendar -->
+  <div class="px-4 pb-6">
+    <div class="flex justify-between items-center gap-2">
+      <!-- Mon - Goal Met -->
+      <div class="flex flex-col items-center gap-2 flex-1">
+        <span class="text-xs text-slate-400">M</span>
+        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-green-500">
+          <span class="text-sm font-bold text-white">14</span>
+        </div>
+      </div>
+      <!-- Tue - Aborted -->
+      <div class="flex flex-col items-center gap-2 flex-1">
+        <span class="text-xs text-slate-400">T</span>
+        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-red-500">
+          <span class="text-sm font-bold text-white">15</span>
+        </div>
+      </div>
+      <!-- Wed - Empty -->
+      <div class="flex flex-col items-center gap-2 flex-1">
+        <span class="text-xs text-slate-400">W</span>
+        <div class="w-10 h-10 flex items-center justify-center rounded-full border border-slate-700">
+          <span class="text-sm text-slate-500">16</span>
+        </div>
+      </div>
+      <!-- Thu - Goal Met -->
+      <div class="flex flex-col items-center gap-2 flex-1">
+        <span class="text-xs text-slate-400">T</span>
+        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-green-500">
+          <span class="text-sm font-bold text-white">17</span>
+        </div>
+      </div>
+      <!-- Fri - Today (In Progress) -->
+      <div class="flex flex-col items-center gap-2 flex-1">
+        <span class="text-xs font-bold text-primary">F</span>
+        <div class="w-10 h-10 flex items-center justify-center rounded-full ring-2 ring-primary bg-primary/10">
+          <span class="text-sm font-bold text-primary">18</span>
+        </div>
+      </div>
+      <!-- Sat - Future -->
+      <div class="flex flex-col items-center gap-2 flex-1 opacity-40">
+        <span class="text-xs text-slate-400">S</span>
+        <div class="w-10 h-10 flex items-center justify-center rounded-full border border-slate-700">
+          <span class="text-sm">19</span>
+        </div>
+      </div>
+      <!-- Sun - Future -->
+      <div class="flex flex-col items-center gap-2 flex-1 opacity-40">
+        <span class="text-xs text-slate-400">S</span>
+        <div class="w-10 h-10 flex items-center justify-center rounded-full border border-slate-700">
+          <span class="text-sm">20</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="flex-1 p-4 space-y-6 pb-24">
+
+  <!-- Today's Detail Card -->
+  <div class="bg-background-dark border border-slate-800 rounded-xl p-5">
+    <div class="flex justify-between items-start mb-4">
+      <div>
+        <h3 class="text-sm text-slate-400">Today's Fasting</h3>
+        <p class="text-2xl font-bold mt-1">16:8 Protocol</p>
+      </div>
+      <span class="bg-primary/20 text-primary px-3 py-1 rounded-full text-xs font-bold">In Progress</span>
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="bg-primary/5 p-3 rounded-lg border border-primary/10">
+        <span class="text-[10px] uppercase tracking-wider text-slate-400">Elapsed</span>
+        <p class="text-lg font-bold">14h 22m</p>
+      </div>
+      <div class="bg-primary/5 p-3 rounded-lg border border-primary/10">
+        <span class="text-[10px] uppercase tracking-wider text-slate-400">Remaining</span>
+        <p class="text-lg font-bold text-primary">01h 38m</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Records -->
+  <section class="space-y-4">
+    <h2 class="text-base font-bold flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary text-xl">history</span>Recent Records
+    </h2>
+    <div class="space-y-3">
+
+      <div class="flex items-center justify-between p-4 bg-slate-800/20 rounded-xl border border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="size-10 rounded-lg bg-green-500/10 flex items-center justify-center"><span class="material-symbols-outlined text-green-500">task_alt</span></div>
+          <div><p class="text-sm font-semibold">Oct 17, 2023</p><p class="text-xs text-slate-500">16h 04m duration</p></div>
+        </div>
+        <span class="text-[10px] font-bold uppercase py-1 px-2 rounded bg-green-500/10 text-green-500">Completed</span>
+      </div>
+
+      <div class="flex items-center justify-between p-4 bg-slate-800/20 rounded-xl border border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="size-10 rounded-lg bg-slate-500/10 flex items-center justify-center"><span class="material-symbols-outlined text-slate-500">block</span></div>
+          <div><p class="text-sm font-semibold">Oct 16, 2023</p><p class="text-xs text-slate-500">No session logged</p></div>
+        </div>
+        <span class="text-[10px] font-bold uppercase py-1 px-2 rounded bg-slate-500/10 text-slate-500">Empty</span>
+      </div>
+
+      <div class="flex items-center justify-between p-4 bg-slate-800/20 rounded-xl border border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="size-10 rounded-lg bg-red-500/10 flex items-center justify-center"><span class="material-symbols-outlined text-red-500">cancel</span></div>
+          <div><p class="text-sm font-semibold">Oct 15, 2023</p><p class="text-xs text-slate-500">12h 40m duration</p></div>
+        </div>
+        <span class="text-[10px] font-bold uppercase py-1 px-2 rounded bg-red-500/10 text-red-500">Aborted</span>
+      </div>
+
+      <div class="flex items-center justify-between p-4 bg-slate-800/20 rounded-xl border border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="size-10 rounded-lg bg-green-500/10 flex items-center justify-center"><span class="material-symbols-outlined text-green-500">task_alt</span></div>
+          <div><p class="text-sm font-semibold">Oct 14, 2023</p><p class="text-xs text-slate-500">18h 12m duration</p></div>
+        </div>
+        <span class="text-[10px] font-bold uppercase py-1 px-2 rounded bg-green-500/10 text-green-500">Completed</span>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="text-center py-4">
+    <p class="text-xs text-slate-500">Only showing last 7 days —
+      <a class="text-primary font-bold" href="05_paywall.html">Upgrade to Pro</a>
+    </p>
+  </footer>
+
+</main>
+
+<!-- Bottom Tab Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-background-dark border-t border-slate-800 px-4 py-2 flex justify-around items-center z-20">
+  <a class="flex flex-col items-center gap-1 p-2 text-slate-400" href="01_timer.html"><span class="material-symbols-outlined">schedule</span><span class="text-[10px]">Timer</span></a>
+  <a class="flex flex-col items-center gap-1 p-2 text-primary" href="04_history.html"><span class="material-symbols-outlined">calendar_month</span><span class="text-[10px] font-bold">History</span></a>
+  <a class="flex flex-col items-center gap-1 p-2 text-slate-400" href="03_stats.html"><span class="material-symbols-outlined">bar_chart</span><span class="text-[10px]">Stats</span></a>
+  <a class="flex flex-col items-center gap-1 p-2 text-slate-400" href="06_settings.html"><span class="material-symbols-outlined">settings</span><span class="text-[10px]">Settings</span></a>
+</nav>
+
+</body>
+</html>

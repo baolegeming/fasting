@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FastFlow - 05 Paywall</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#ec5b13",
+          "background-light": "#f8f6f6",
+          "background-dark": "#221610",
+        },
+        fontFamily: { "display": ["Public Sans"] },
+      },
+    },
+  }
+</script>
+<style>
+  body { font-family: 'Public Sans', sans-serif; min-height: max(884px, 100dvh); }
+</style>
+</head>
+<body class="bg-background-light font-display antialiased">
+
+<div class="relative flex min-h-screen w-full flex-col bg-background-light overflow-x-hidden">
+
+  <!-- Close Button -->
+  <div class="flex items-center p-4 pb-2 justify-end sticky top-0 z-10">
+    <a href="01_timer.html">
+      <button class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-200/50 text-slate-900 hover:bg-slate-300">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </a>
+  </div>
+
+  <!-- Hero -->
+  <div class="px-4">
+    <div class="relative w-full bg-gradient-to-br from-primary via-primary/90 to-primary/70 flex flex-col items-center justify-center overflow-hidden rounded-xl min-h-[240px] shadow-lg shadow-primary/20">
+      <div class="bg-white/20 p-6 rounded-full backdrop-blur-sm mb-4">
+        <span class="material-symbols-outlined text-white" style="font-size:64px">crown</span>
+      </div>
+      <div class="absolute top-0 right-0 p-8 opacity-10">
+        <span class="material-symbols-outlined" style="font-size:120px">bolt</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Headline -->
+  <div class="px-4 pt-8 pb-4 text-center">
+    <h1 class="text-slate-900 tracking-tight text-[32px] font-extrabold leading-tight">Unlock FastFlow Pro</h1>
+    <p class="text-slate-600 mt-2 text-lg">Take control of your health journey</p>
+  </div>
+
+  <!-- Feature List -->
+  <div class="px-6 py-2 space-y-1 max-w-md mx-auto w-full">
+    <div class="flex items-center gap-x-4 py-3 border-b border-slate-200">
+      <div class="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10">
+        <span class="material-symbols-outlined text-primary" style="font-size:18px">check</span>
+      </div>
+      <p class="text-slate-800 text-base font-medium">Custom fasting schedules</p>
+    </div>
+    <div class="flex items-center gap-x-4 py-3 border-b border-slate-200">
+      <div class="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10">
+        <span class="material-symbols-outlined text-primary" style="font-size:18px">check</span>
+      </div>
+      <p class="text-slate-800 text-base font-medium">Full history &amp; streak tracking</p>
+    </div>
+    <div class="flex items-center gap-x-4 py-3 border-b border-slate-200">
+      <div class="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10">
+        <span class="material-symbols-outlined text-primary" style="font-size:18px">check</span>
+      </div>
+      <p class="text-slate-800 text-base font-medium">Weight trend vs fasting chart</p>
+    </div>
+    <div class="flex items-center gap-x-4 py-3">
+      <div class="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10">
+        <span class="material-symbols-outlined text-primary" style="font-size:18px">check</span>
+      </div>
+      <p class="text-slate-800 text-base font-medium">iCloud backup &amp; restore</p>
+    </div>
+  </div>
+
+  <!-- Pricing Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 py-6 max-w-2xl mx-auto w-full">
+
+    <!-- Monthly -->
+    <div class="flex flex-col gap-4 rounded-xl border-2 border-slate-200 bg-white p-6 cursor-pointer hover:border-slate-300">
+      <div>
+        <h2 class="text-slate-500 text-sm font-bold uppercase tracking-wider">Monthly</h2>
+        <p class="flex items-baseline gap-1 text-slate-900 mt-1">
+          <span class="text-4xl font-black tracking-tight">¥25</span>
+          <span class="text-slate-500 text-base font-medium">/mo</span>
+        </p>
+      </div>
+      <div class="text-[13px] font-medium flex gap-2 text-slate-600">
+        <span class="material-symbols-outlined text-primary" style="font-size:18px">verified</span>Billed monthly
+      </div>
+    </div>
+
+    <!-- Yearly (Best Value) -->
+    <div class="flex flex-col gap-4 rounded-xl border-2 border-primary bg-primary/5 p-6 relative shadow-md shadow-primary/10 cursor-pointer">
+      <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary px-3 py-1 rounded-full">
+        <p class="text-white text-[10px] font-bold uppercase tracking-widest">Best Value</p>
+      </div>
+      <div class="pt-1">
+        <h2 class="text-primary text-sm font-bold uppercase tracking-wider">Yearly</h2>
+        <p class="flex items-baseline gap-1 text-slate-900 mt-1">
+          <span class="text-4xl font-black tracking-tight">¥158</span>
+          <span class="text-slate-500 text-base font-medium">/yr</span>
+        </p>
+      </div>
+      <div class="flex flex-col gap-2">
+        <div class="text-[13px] font-semibold flex gap-2 text-primary">
+          <span class="material-symbols-outlined" style="font-size:18px">calendar_today</span>7-day free trial
+        </div>
+        <p class="text-[11px] text-slate-500">¥13.17 / month equivalent</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="px-4 pb-12 w-full max-w-md mx-auto">
+    <button class="w-full bg-primary text-white py-4 rounded-xl text-lg font-bold shadow-lg shadow-primary/30 mb-6">
+      Start Free Trial
+    </button>
+    <div class="flex flex-col items-center gap-2">
+      <p class="text-slate-400 text-xs font-medium uppercase tracking-tighter">Cancel anytime · Restore Purchase</p>
+      <div class="flex gap-4 mt-2">
+        <a class="text-[10px] text-slate-400 underline" href="#">Terms of Service</a>
+        <a class="text-[10px] text-slate-400 underline" href="#">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

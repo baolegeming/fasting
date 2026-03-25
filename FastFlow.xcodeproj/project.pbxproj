@@ -1,0 +1,562 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		052C16D2344F581A52FA50A0 /* PhaseCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E329F14D500A9DB36FE92D /* PhaseCardView.swift */; };
+		0BEFA0396B7471971FF188D3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6345B4D2B29FA349DE4F432 /* SettingsView.swift */; };
+		0DCB073E25F49528AC7F9C25 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780839B0F94921EFE00ED8D3 /* StatsView.swift */; };
+		120F5669B4485E122D68A188 /* PlanOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = A403ED06A3E9E3EA0BDC28AC /* PlanOption.swift */; };
+		193B18CD87C584B53219C9AD /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4901168E11757C663242A159 /* Localizable.strings */; };
+		1E9541972DC845B5C259738A /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427A08B55035D06ED7D29472 /* NotificationManager.swift */; };
+		24C4D6DEB9CBA7AD6846E57B /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 97DB5FE8AF16794E0934648C /* GoogleMobileAds */; };
+		38516A269631E918AA302B2C /* PhaseModalSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1864CDE8DB832D56476171 /* PhaseModalSheetView.swift */; };
+		3DD53AC150D0922370727261 /* SubscriptionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2790FC90E1BCB1FCC01BBA19 /* SubscriptionRuntime.swift */; };
+		48F3C74A9B5774DEBE3EFAC6 /* FastingRecordEditorSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49553D6A2E0D552881ACE8C /* FastingRecordEditorSheetView.swift */; };
+		4A26CEF2AB83672C45C7BAA1 /* NativeAdSlotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCFA1E593AB3ED11669785C /* NativeAdSlotView.swift */; };
+		4D94687A02D89C8C36E2E75E /* FastingCoachingGuidance.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD9DBA617C07EA40784CC61 /* FastingCoachingGuidance.swift */; };
+		5E70330CB8BC33EDAC5C0C55 /* OngoingFastCorrectionSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B65EC99B5790290915C31AE /* OngoingFastCorrectionSheetView.swift */; };
+		5F94C7B257807FB7DAA369FB /* AdMobNativeAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C7F8E0AE78A2C3B27CB681 /* AdMobNativeAdView.swift */; };
+		60DC3261B860ED3BB0BA209D /* FastingEducationContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5281CFAF6934714A4DB5B3C8 /* FastingEducationContent.swift */; };
+		6D8403146F132B993C11C08D /* WeightEntriesSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9B8D76EF362900BD5E8ACB /* WeightEntriesSheetView.swift */; };
+		75E54A84BBF4A15795571279 /* ActivityShareSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 290E27D52EF38973D047FC21 /* ActivityShareSheetView.swift */; };
+		7A160F6A95B4825256BFA40B /* HistoryFilterSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1DFC28C5DA882A4D9F51A5 /* HistoryFilterSheetView.swift */; };
+		83162F76994C86B75660CBD5 /* MonetizationRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81162DFB2F5D6CA8F6795951 /* MonetizationRuntime.swift */; };
+		83CC9169159F5E11940CEB50 /* Monetization.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81680C32BD183EA747A7A29 /* Monetization.swift */; };
+		8691DAD01B56245A6A635E13 /* AppLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3814C43B9B960FBCAD71CB61 /* AppLanguage.swift */; };
+		8A9C027007F66F844BB6C40E /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D2C6E2123F6733B7B1888F /* PaywallView.swift */; };
+		988F8DF84864F7CD0170E98F /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A25BCAB8513A9F4636745D /* HistoryView.swift */; };
+		A5A95B014C52F862C2AE8B2D /* CustomPlanSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19E9EB761D837ADC1290029 /* CustomPlanSheetView.swift */; };
+		AD407AEC0D3938EE5DCEE05A /* FastFlowTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F4523F0CD921256F31E232 /* FastFlowTimerView.swift */; };
+		AFA2BF130F62ACB809CBC104 /* FastingSessionFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5957362ED90D0C45F058BDBE /* FastingSessionFeedback.swift */; };
+		B27172100DBD0E612202904D /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A7CECB72CDD2649C24B15C /* OnboardingView.swift */; };
+		B2D77894801F29F38F3AF106 /* EndFastFeedbackSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7F5CEB43421EA0F5C225E3 /* EndFastFeedbackSheetView.swift */; };
+		B47FCD9FA99138226FE6AED2 /* WeeklyReportShareCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB9325AE17DE5DA692F0520 /* WeeklyReportShareCardView.swift */; };
+		B8A45218011ED5B3492A8D8D /* FastFlowModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58A1CAA3F84B6AE87C03EC9 /* FastFlowModels.swift */; };
+		BF0D2A872098CD07B8F19375 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A99E99E5B5306A0A9E1D8D4 /* Assets.xcassets */; };
+		C15257EBA4F3571F0D264F51 /* WeightTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D38FA8EAF9AAE5697336DA4 /* WeightTracking.swift */; };
+		C5EC5EFDEC04525C2B28D36F /* FastFlowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D91B3BB289EDBD45084BDA80 /* FastFlowApp.swift */; };
+		C63EF092D4FF6F3A74A4E8F0 /* FastFlowTimerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9169870153ADFDE97D98CCA3 /* FastFlowTimerViewModel.swift */; };
+		CEAB96153924B48FF19908BD /* GoogleUserMessagingPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = 0E5124097B67C3B9BB78A90C /* GoogleUserMessagingPlatform */; };
+		D055C7954570C6345A135302 /* TimerRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F634B31B4C9832654B679B8F /* TimerRingView.swift */; };
+		D0770C9C6DEFDA751AE37FAB /* WeightEntrySheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0707BC3A0D671405C06F6CDD /* WeightEntrySheetView.swift */; };
+		D48794A40E0420423D4272C6 /* FastingAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E614EF8D0D90F61F2A7A9D53 /* FastingAnalytics.swift */; };
+		D65F95A2D70F82714D30A6F6 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = B80380C63278875A5A806DB3 /* RevenueCat */; };
+		E3963B2FB21919FCC96FF727 /* ActionButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FF4B6173023E5B37DC2C8B /* ActionButtonsView.swift */; };
+		F0551B73998BF9B38AAE39D3 /* GiveUpReasonSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E640A3B92054402401336FB /* GiveUpReasonSheetView.swift */; };
+		F84CE6309F9009D5E6B33E12 /* WeeklyReportSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59189CC7C610CA162C74F65E /* WeeklyReportSheetView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0707BC3A0D671405C06F6CDD /* WeightEntrySheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightEntrySheetView.swift; sourceTree = "<group>"; };
+		08A7CECB72CDD2649C24B15C /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		0E640A3B92054402401336FB /* GiveUpReasonSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiveUpReasonSheetView.swift; sourceTree = "<group>"; };
+		13C7F8E0AE78A2C3B27CB681 /* AdMobNativeAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobNativeAdView.swift; sourceTree = "<group>"; };
+		20FF4B6173023E5B37DC2C8B /* ActionButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButtonsView.swift; sourceTree = "<group>"; };
+		2790FC90E1BCB1FCC01BBA19 /* SubscriptionRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionRuntime.swift; sourceTree = "<group>"; };
+		290E27D52EF38973D047FC21 /* ActivityShareSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityShareSheetView.swift; sourceTree = "<group>"; };
+		3814C43B9B960FBCAD71CB61 /* AppLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguage.swift; sourceTree = "<group>"; };
+		427A08B55035D06ED7D29472 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		5281CFAF6934714A4DB5B3C8 /* FastingEducationContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastingEducationContent.swift; sourceTree = "<group>"; };
+		52F4523F0CD921256F31E232 /* FastFlowTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastFlowTimerView.swift; sourceTree = "<group>"; };
+		59189CC7C610CA162C74F65E /* WeeklyReportSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyReportSheetView.swift; sourceTree = "<group>"; };
+		5957362ED90D0C45F058BDBE /* FastingSessionFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastingSessionFeedback.swift; sourceTree = "<group>"; };
+		5CB9325AE17DE5DA692F0520 /* WeeklyReportShareCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyReportShareCardView.swift; sourceTree = "<group>"; };
+		5D38FA8EAF9AAE5697336DA4 /* WeightTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightTracking.swift; sourceTree = "<group>"; };
+		621EBD9AA7A21AD895BB6377 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		6D9B8D76EF362900BD5E8ACB /* WeightEntriesSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightEntriesSheetView.swift; sourceTree = "<group>"; };
+		6E1864CDE8DB832D56476171 /* PhaseModalSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhaseModalSheetView.swift; sourceTree = "<group>"; };
+		780839B0F94921EFE00ED8D3 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		81162DFB2F5D6CA8F6795951 /* MonetizationRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonetizationRuntime.swift; sourceTree = "<group>"; };
+		8B65EC99B5790290915C31AE /* OngoingFastCorrectionSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OngoingFastCorrectionSheetView.swift; sourceTree = "<group>"; };
+		9169870153ADFDE97D98CCA3 /* FastFlowTimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastFlowTimerViewModel.swift; sourceTree = "<group>"; };
+		94A36CE54D35A42F91EF1E3B /* FastFlow.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FastFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A99E99E5B5306A0A9E1D8D4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A403ED06A3E9E3EA0BDC28AC /* PlanOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanOption.swift; sourceTree = "<group>"; };
+		A4A25BCAB8513A9F4636745D /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		A58A1CAA3F84B6AE87C03EC9 /* FastFlowModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastFlowModels.swift; sourceTree = "<group>"; };
+		AC1DFC28C5DA882A4D9F51A5 /* HistoryFilterSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryFilterSheetView.swift; sourceTree = "<group>"; };
+		ADCFA1E593AB3ED11669785C /* NativeAdSlotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdSlotView.swift; sourceTree = "<group>"; };
+		B49553D6A2E0D552881ACE8C /* FastingRecordEditorSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastingRecordEditorSheetView.swift; sourceTree = "<group>"; };
+		BB7F5CEB43421EA0F5C225E3 /* EndFastFeedbackSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndFastFeedbackSheetView.swift; sourceTree = "<group>"; };
+		C4D2C6E2123F6733B7B1888F /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		C5E329F14D500A9DB36FE92D /* PhaseCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhaseCardView.swift; sourceTree = "<group>"; };
+		CD5BD31FEF259814874A7D62 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D91B3BB289EDBD45084BDA80 /* FastFlowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastFlowApp.swift; sourceTree = "<group>"; };
+		DFD9DBA617C07EA40784CC61 /* FastingCoachingGuidance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastingCoachingGuidance.swift; sourceTree = "<group>"; };
+		E614EF8D0D90F61F2A7A9D53 /* FastingAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastingAnalytics.swift; sourceTree = "<group>"; };
+		E6345B4D2B29FA349DE4F432 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		F19E9EB761D837ADC1290029 /* CustomPlanSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPlanSheetView.swift; sourceTree = "<group>"; };
+		F634B31B4C9832654B679B8F /* TimerRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerRingView.swift; sourceTree = "<group>"; };
+		F81680C32BD183EA747A7A29 /* Monetization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monetization.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D0D0A0093EC71C4173D574FD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				24C4D6DEB9CBA7AD6846E57B /* GoogleMobileAds in Frameworks */,
+				D65F95A2D70F82714D30A6F6 /* RevenueCat in Frameworks */,
+				CEAB96153924B48FF19908BD /* GoogleUserMessagingPlatform in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		26B0B9DD3D263FF3A82BC5F4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				94A36CE54D35A42F91EF1E3B /* FastFlow.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		53BE67211E7C0E5E9E64E365 /* healthy_app_analysis */ = {
+			isa = PBXGroup;
+			children = (
+				20FF4B6173023E5B37DC2C8B /* ActionButtonsView.swift */,
+				290E27D52EF38973D047FC21 /* ActivityShareSheetView.swift */,
+				13C7F8E0AE78A2C3B27CB681 /* AdMobNativeAdView.swift */,
+				3814C43B9B960FBCAD71CB61 /* AppLanguage.swift */,
+				F19E9EB761D837ADC1290029 /* CustomPlanSheetView.swift */,
+				BB7F5CEB43421EA0F5C225E3 /* EndFastFeedbackSheetView.swift */,
+				D91B3BB289EDBD45084BDA80 /* FastFlowApp.swift */,
+				A58A1CAA3F84B6AE87C03EC9 /* FastFlowModels.swift */,
+				52F4523F0CD921256F31E232 /* FastFlowTimerView.swift */,
+				9169870153ADFDE97D98CCA3 /* FastFlowTimerViewModel.swift */,
+				E614EF8D0D90F61F2A7A9D53 /* FastingAnalytics.swift */,
+				DFD9DBA617C07EA40784CC61 /* FastingCoachingGuidance.swift */,
+				5281CFAF6934714A4DB5B3C8 /* FastingEducationContent.swift */,
+				B49553D6A2E0D552881ACE8C /* FastingRecordEditorSheetView.swift */,
+				5957362ED90D0C45F058BDBE /* FastingSessionFeedback.swift */,
+				0E640A3B92054402401336FB /* GiveUpReasonSheetView.swift */,
+				AC1DFC28C5DA882A4D9F51A5 /* HistoryFilterSheetView.swift */,
+				A4A25BCAB8513A9F4636745D /* HistoryView.swift */,
+				F81680C32BD183EA747A7A29 /* Monetization.swift */,
+				81162DFB2F5D6CA8F6795951 /* MonetizationRuntime.swift */,
+				ADCFA1E593AB3ED11669785C /* NativeAdSlotView.swift */,
+				427A08B55035D06ED7D29472 /* NotificationManager.swift */,
+				08A7CECB72CDD2649C24B15C /* OnboardingView.swift */,
+				8B65EC99B5790290915C31AE /* OngoingFastCorrectionSheetView.swift */,
+				C4D2C6E2123F6733B7B1888F /* PaywallView.swift */,
+				C5E329F14D500A9DB36FE92D /* PhaseCardView.swift */,
+				6E1864CDE8DB832D56476171 /* PhaseModalSheetView.swift */,
+				A403ED06A3E9E3EA0BDC28AC /* PlanOption.swift */,
+				E6345B4D2B29FA349DE4F432 /* SettingsView.swift */,
+				780839B0F94921EFE00ED8D3 /* StatsView.swift */,
+				2790FC90E1BCB1FCC01BBA19 /* SubscriptionRuntime.swift */,
+				F634B31B4C9832654B679B8F /* TimerRingView.swift */,
+				5CB9325AE17DE5DA692F0520 /* WeeklyReportShareCardView.swift */,
+				59189CC7C610CA162C74F65E /* WeeklyReportSheetView.swift */,
+				6D9B8D76EF362900BD5E8ACB /* WeightEntriesSheetView.swift */,
+				0707BC3A0D671405C06F6CDD /* WeightEntrySheetView.swift */,
+				5D38FA8EAF9AAE5697336DA4 /* WeightTracking.swift */,
+			);
+			name = healthy_app_analysis;
+			path = .;
+			sourceTree = "<group>";
+		};
+		59948C8B154C539C472C7603 = {
+			isa = PBXGroup;
+			children = (
+				9A99E99E5B5306A0A9E1D8D4 /* Assets.xcassets */,
+				53BE67211E7C0E5E9E64E365 /* healthy_app_analysis */,
+				95D6C1AF8EEC08AE3C78A850 /* Resources */,
+				26B0B9DD3D263FF3A82BC5F4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		95D6C1AF8EEC08AE3C78A850 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4901168E11757C663242A159 /* Localizable.strings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DFCA7138F9A0A07BA805011A /* FastFlow */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8D54310EB6F0CDED3BD18878 /* Build configuration list for PBXNativeTarget "FastFlow" */;
+			buildPhases = (
+				C64ADEA1972420E0126813EF /* Sources */,
+				F02C0F342A89CAE4B93578B9 /* Resources */,
+				D0D0A0093EC71C4173D574FD /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FastFlow;
+			packageProductDependencies = (
+				97DB5FE8AF16794E0934648C /* GoogleMobileAds */,
+				B80380C63278875A5A806DB3 /* RevenueCat */,
+				0E5124097B67C3B9BB78A90C /* GoogleUserMessagingPlatform */,
+			);
+			productName = FastFlow;
+			productReference = 94A36CE54D35A42F91EF1E3B /* FastFlow.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7A020E724BB188C407FDDAA9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					DFCA7138F9A0A07BA805011A = {
+						DevelopmentTeam = P4U4BC35AW;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 4A0D26C3817921D5B0D57575 /* Build configuration list for PBXProject "FastFlow" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+				"zh-Hans",
+			);
+			mainGroup = 59948C8B154C539C472C7603;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				5098F4957F0FBC48142DB921 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				BB1C2FBD253C2A74F64EEB65 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
+				4755C5BF0C2F660FE615F638 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 26B0B9DD3D263FF3A82BC5F4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DFCA7138F9A0A07BA805011A /* FastFlow */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F02C0F342A89CAE4B93578B9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF0D2A872098CD07B8F19375 /* Assets.xcassets in Resources */,
+				193B18CD87C584B53219C9AD /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C64ADEA1972420E0126813EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E3963B2FB21919FCC96FF727 /* ActionButtonsView.swift in Sources */,
+				75E54A84BBF4A15795571279 /* ActivityShareSheetView.swift in Sources */,
+				5F94C7B257807FB7DAA369FB /* AdMobNativeAdView.swift in Sources */,
+				8691DAD01B56245A6A635E13 /* AppLanguage.swift in Sources */,
+				A5A95B014C52F862C2AE8B2D /* CustomPlanSheetView.swift in Sources */,
+				B2D77894801F29F38F3AF106 /* EndFastFeedbackSheetView.swift in Sources */,
+				C5EC5EFDEC04525C2B28D36F /* FastFlowApp.swift in Sources */,
+				B8A45218011ED5B3492A8D8D /* FastFlowModels.swift in Sources */,
+				AD407AEC0D3938EE5DCEE05A /* FastFlowTimerView.swift in Sources */,
+				C63EF092D4FF6F3A74A4E8F0 /* FastFlowTimerViewModel.swift in Sources */,
+				D48794A40E0420423D4272C6 /* FastingAnalytics.swift in Sources */,
+				4D94687A02D89C8C36E2E75E /* FastingCoachingGuidance.swift in Sources */,
+				60DC3261B860ED3BB0BA209D /* FastingEducationContent.swift in Sources */,
+				48F3C74A9B5774DEBE3EFAC6 /* FastingRecordEditorSheetView.swift in Sources */,
+				AFA2BF130F62ACB809CBC104 /* FastingSessionFeedback.swift in Sources */,
+				F0551B73998BF9B38AAE39D3 /* GiveUpReasonSheetView.swift in Sources */,
+				7A160F6A95B4825256BFA40B /* HistoryFilterSheetView.swift in Sources */,
+				988F8DF84864F7CD0170E98F /* HistoryView.swift in Sources */,
+				83CC9169159F5E11940CEB50 /* Monetization.swift in Sources */,
+				83162F76994C86B75660CBD5 /* MonetizationRuntime.swift in Sources */,
+				4A26CEF2AB83672C45C7BAA1 /* NativeAdSlotView.swift in Sources */,
+				1E9541972DC845B5C259738A /* NotificationManager.swift in Sources */,
+				B27172100DBD0E612202904D /* OnboardingView.swift in Sources */,
+				5E70330CB8BC33EDAC5C0C55 /* OngoingFastCorrectionSheetView.swift in Sources */,
+				8A9C027007F66F844BB6C40E /* PaywallView.swift in Sources */,
+				052C16D2344F581A52FA50A0 /* PhaseCardView.swift in Sources */,
+				38516A269631E918AA302B2C /* PhaseModalSheetView.swift in Sources */,
+				120F5669B4485E122D68A188 /* PlanOption.swift in Sources */,
+				0BEFA0396B7471971FF188D3 /* SettingsView.swift in Sources */,
+				0DCB073E25F49528AC7F9C25 /* StatsView.swift in Sources */,
+				3DD53AC150D0922370727261 /* SubscriptionRuntime.swift in Sources */,
+				D055C7954570C6345A135302 /* TimerRingView.swift in Sources */,
+				B47FCD9FA99138226FE6AED2 /* WeeklyReportShareCardView.swift in Sources */,
+				F84CE6309F9009D5E6B33E12 /* WeeklyReportSheetView.swift in Sources */,
+				6D8403146F132B993C11C08D /* WeightEntriesSheetView.swift in Sources */,
+				D0770C9C6DEFDA751AE37FAB /* WeightEntrySheetView.swift in Sources */,
+				C15257EBA4F3571F0D264F51 /* WeightTracking.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		4901168E11757C663242A159 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CD5BD31FEF259814874A7D62 /* en */,
+				621EBD9AA7A21AD895BB6377 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		653AAB416626A39A5CB449CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = P4U4BC35AW;
+				FASTFLOW_ADMOB_HISTORY_NATIVE_UNIT_ID = "ca-app-pub-3940256099942544/3986624511";
+				FASTFLOW_ADMOB_INSIGHTS_NATIVE_UNIT_ID = "ca-app-pub-3940256099942544/3986624511";
+				FASTFLOW_AD_INVENTORY_DEFAULT_MODE = test;
+				FASTFLOW_GAD_APPLICATION_IDENTIFIER = "ca-app-pub-3940256099942544~1458002511";
+				FASTFLOW_REVENUECAT_API_KEY = appl_WQdoTZSRKQMIovATGtmZiLCbrcL;
+				FASTFLOW_REVENUECAT_ENTITLEMENT_ID = "FastFlow Pro";
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7FD88CA87519DB3C1B40C47F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lightingTech.fastflow;
+				PRODUCT_NAME = FastFlow;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		C9FF9047A17629056098BF44 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = P4U4BC35AW;
+				FASTFLOW_ADMOB_HISTORY_NATIVE_UNIT_ID = "ca-app-pub-2900826220475310/9133258403";
+				FASTFLOW_ADMOB_INSIGHTS_NATIVE_UNIT_ID = "ca-app-pub-2900826220475310/3423568477";
+				FASTFLOW_AD_INVENTORY_DEFAULT_MODE = live;
+				FASTFLOW_GAD_APPLICATION_IDENTIFIER = "ca-app-pub-2900826220475310~8147479796";
+				FASTFLOW_REVENUECAT_API_KEY = appl_WQdoTZSRKQMIovATGtmZiLCbrcL;
+				FASTFLOW_REVENUECAT_ENTITLEMENT_ID = "FastFlow Pro";
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D841FE646A0CD25AA8CDD5F1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lightingTech.fastflow;
+				PRODUCT_NAME = FastFlow;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4A0D26C3817921D5B0D57575 /* Build configuration list for PBXProject "FastFlow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D841FE646A0CD25AA8CDD5F1 /* Debug */,
+				7FD88CA87519DB3C1B40C47F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8D54310EB6F0CDED3BD18878 /* Build configuration list for PBXNativeTarget "FastFlow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				653AAB416626A39A5CB449CF /* Debug */,
+				C9FF9047A17629056098BF44 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4755C5BF0C2F660FE615F638 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.0;
+			};
+		};
+		5098F4957F0FBC48142DB921 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.14.0;
+			};
+		};
+		BB1C2FBD253C2A74F64EEB65 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0E5124097B67C3B9BB78A90C /* GoogleUserMessagingPlatform */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4755C5BF0C2F660FE615F638 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */;
+			productName = GoogleUserMessagingPlatform;
+		};
+		97DB5FE8AF16794E0934648C /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5098F4957F0FBC48142DB921 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+		B80380C63278875A5A806DB3 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BB1C2FBD253C2A74F64EEB65 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCat;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 7A020E724BB188C407FDDAA9 /* Project object */;
+}
