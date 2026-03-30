@@ -17,6 +17,8 @@ struct OngoingFastCorrectionSheetView: View {
     private let primary = Color(hex: "ec5b13")
     private let backgroundDark = Color(hex: "121212")
     private let cardDark = Color(hex: "1C1C1E")
+    private let secondaryText = Color.white.opacity(0.72)
+    private let tertiaryText = Color.white.opacity(0.58)
 
     init(
         initialStartAt: Date,
@@ -33,7 +35,7 @@ struct OngoingFastCorrectionSheetView: View {
         self.onDelete = onDelete
         self.onCancel = onCancel
         _selectedPlanType = State(initialValue: PlanOption.isCustom(type: initialPlanType) ? PlanOption.customType : initialPlanType)
-        _customFastingHours = State(initialValue: PlanOption.customFastingHours(for: initialTargetDurationSec) ?? 17)
+        _customFastingHours = State(initialValue: PlanOption.customFastingHours(for: initialTargetDurationSec) ?? PlanOption.normalizedCustomFastingHours(for: initialTargetDurationSec))
         _startAt = State(initialValue: initialStartAt)
     }
 
@@ -45,20 +47,20 @@ struct OngoingFastCorrectionSheetView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 18) {
                         VStack(alignment: .leading, spacing: 6) {
-                            Text("Adjust Current Fast")
+                            Text(AppL10n.string("Adjust Current Fast"))
                                 .font(.system(size: 26, weight: .bold))
                                 .foregroundStyle(.white)
                             Text(AppL10n.string("ongoing_correction.subtitle"))
-                                .font(.system(size: 13))
-                                .foregroundStyle(.gray)
+                                .font(.system(size: 14))
+                                .foregroundStyle(secondaryText)
                                 .lineSpacing(3)
                         }
 
                         settingsCard {
                             VStack(alignment: .leading, spacing: 14) {
-                                Text("Current Plan")
-                                    .font(.system(size: 12, weight: .bold))
-                                    .foregroundStyle(.gray)
+                                Text(AppL10n.string("Current Plan"))
+                                    .font(.system(size: 13, weight: .bold))
+                                    .foregroundStyle(secondaryText)
 
                                 VStack(spacing: 10) {
                                     ForEach(PlanOption.allCases, id: \.type) { option in
@@ -67,10 +69,7 @@ struct OngoingFastCorrectionSheetView: View {
                                         }
                                     }
 
-                                    planButton(
-                                        title: AppL10n.format("plan.custom.current", customPlanName),
-                                        isSelected: selectedPlanType == PlanOption.customType
-                                    ) {
+                                    customPlanButton {
                                         selectedPlanType = PlanOption.customType
                                         showCustomPlanSheet = true
                                     }
@@ -80,9 +79,9 @@ struct OngoingFastCorrectionSheetView: View {
 
                         settingsCard {
                             VStack(alignment: .leading, spacing: 10) {
-                                Text("Actual Start Time")
-                                    .font(.system(size: 12, weight: .bold))
-                                    .foregroundStyle(.gray)
+                                Text(AppL10n.string("Actual Start Time"))
+                                    .font(.system(size: 13, weight: .bold))
+                                    .foregroundStyle(secondaryText)
                                 DatePicker(
                                     "",
                                     selection: $startAt,
@@ -92,14 +91,18 @@ struct OngoingFastCorrectionSheetView: View {
                                 .labelsHidden()
                                 .datePickerStyle(.compact)
                                 .tint(primary)
+                                Text(AppL10n.string("ongoing_correction.start_time_hint"))
+                                    .font(.system(size: 13))
+                                    .foregroundStyle(tertiaryText)
+                                    .lineSpacing(3)
                             }
                         }
 
                         settingsCard {
                             VStack(alignment: .leading, spacing: 10) {
-                                Text("Why this matters")
-                                    .font(.system(size: 12, weight: .bold))
-                                    .foregroundStyle(.gray)
+                                Text(AppL10n.string("Why this matters"))
+                                    .font(.system(size: 13, weight: .bold))
+                                    .foregroundStyle(secondaryText)
                                 infoRow(
                                     title: AppL10n.string("Late tap"),
                                     detail: AppL10n.string("ongoing_correction.late_tap_detail")
@@ -111,7 +114,7 @@ struct OngoingFastCorrectionSheetView: View {
                             }
                         }
 
-                        Button("Delete Current Session") {
+                        Button(AppL10n.string("Delete Current Session")) {
                             showDeleteConfirmation = true
                         }
                         .font(.system(size: 15, weight: .bold))
@@ -121,7 +124,7 @@ struct OngoingFastCorrectionSheetView: View {
                         .background(Color.red.opacity(0.12), in: RoundedRectangle(cornerRadius: 14))
 
                         HStack(spacing: 12) {
-                            Button("Cancel") {
+                            Button(AppL10n.string("Cancel")) {
                                 onCancel()
                             }
                             .font(.system(size: 16, weight: .bold))
@@ -130,7 +133,7 @@ struct OngoingFastCorrectionSheetView: View {
                             .padding(.vertical, 14)
                             .background(Color.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 14))
 
-                            Button("Save Changes") {
+                            Button(AppL10n.string("Save Changes")) {
                                 onSave(startAt, selectedPlanType, selectedDurationSec)
                             }
                             .font(.system(size: 16, weight: .bold))
@@ -145,7 +148,7 @@ struct OngoingFastCorrectionSheetView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Close") {
+                    Button(AppL10n.string("common.close")) {
                         onCancel()
                     }
                     .foregroundStyle(.gray)
@@ -193,6 +196,13 @@ struct OngoingFastCorrectionSheetView: View {
         PlanOption.customRatioName(durationSec: customFastingHours * 3600) ?? AppL10n.string("custom_plan.default_ratio")
     }
 
+    private var customPlanDescription: String {
+        if let customName = PlanOption.customRatioName(durationSec: customFastingHours * 3600) {
+            return AppL10n.format("ongoing_correction.custom.current_desc", customName)
+        }
+        return AppL10n.string("ongoing_correction.custom.default_desc")
+    }
+
     private func settingsCard<Content: View>(@ViewBuilder content: () -> Content) -> some View {
         VStack(spacing: 0) {
             content()
@@ -231,6 +241,46 @@ struct OngoingFastCorrectionSheetView: View {
         .buttonStyle(.plain)
     }
 
+    private func customPlanButton(action: @escaping () -> Void) -> some View {
+        let isSelected = selectedPlanType == PlanOption.customType
+
+        return Button(action: action) {
+            HStack(alignment: .top, spacing: 12) {
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(spacing: 8) {
+                        Text(AppL10n.string("custom_plan.title"))
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundStyle(.white)
+                        if isSelected {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundStyle(primary)
+                        }
+                    }
+                    Text(customPlanDescription)
+                        .font(.system(size: 13))
+                        .foregroundStyle(secondaryText)
+                        .multilineTextAlignment(.leading)
+                        .lineSpacing(3)
+                }
+                Spacer()
+                Image(systemName: "slider.horizontal.3")
+                    .foregroundStyle(primary)
+                    .padding(.top, 2)
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 14)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(isSelected ? primary.opacity(0.15) : Color.white.opacity(0.03))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(isSelected ? primary : .clear, lineWidth: 1.5)
+            )
+        }
+        .buttonStyle(.plain)
+    }
+
     private func infoRow(title: String, detail: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
@@ -238,7 +288,7 @@ struct OngoingFastCorrectionSheetView: View {
                 .foregroundStyle(.white)
             Text(detail)
                 .font(.system(size: 13))
-                .foregroundStyle(.gray)
+                .foregroundStyle(secondaryText)
                 .lineSpacing(3)
         }
         .frame(maxWidth: .infinity, alignment: .leading)

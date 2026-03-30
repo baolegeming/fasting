@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import SwiftUI
 
 enum AppLanguage: String, CaseIterable, Identifiable {
@@ -41,17 +42,16 @@ enum AppLanguage: String, CaseIterable, Identifiable {
 
 @MainActor
 final class AppLanguageStore: ObservableObject {
-    static let shared = AppLanguageStore()
-
-    @Published var language: AppLanguage {
-        didSet {
-            defaults.set(language.rawValue, forKey: FastFlowDefaultsKey.appLanguage)
-        }
-    }
+    @Published private(set) var language: AppLanguage
 
     private let defaults: UserDefaults
+    private weak var syncedPreferencesStore: SyncedPreferencesStore?
+    private var preferencesCancellable: AnyCancellable?
 
-    init(defaults: UserDefaults = .standard) {
+    init(
+        defaults: UserDefaults = .standard,
+        syncedPreferencesStore: SyncedPreferencesStore? = nil
+    ) {
         self.defaults = defaults
         if let rawValue = defaults.string(forKey: FastFlowDefaultsKey.appLanguage),
            let storedLanguage = AppLanguage(rawValue: rawValue) {
@@ -60,6 +60,9 @@ final class AppLanguageStore: ObservableObject {
             let resolved = AppLanguage.defaultValue()
             defaults.set(resolved.rawValue, forKey: FastFlowDefaultsKey.appLanguage)
             self.language = resolved
+        }
+        if let syncedPreferencesStore {
+            configure(syncedPreferencesStore: syncedPreferencesStore)
         }
     }
 
@@ -76,7 +79,26 @@ final class AppLanguageStore: ObservableObject {
     }
 
     func setLanguage(_ language: AppLanguage) {
+        apply(language: language, persistToPreferences: true)
+    }
+
+    func configure(syncedPreferencesStore: SyncedPreferencesStore) {
+        self.syncedPreferencesStore = syncedPreferencesStore
+        apply(language: syncedPreferencesStore.appLanguage, persistToPreferences: false)
+        preferencesCancellable = syncedPreferencesStore.$appLanguage
+            .removeDuplicates()
+            .sink { [weak self] language in
+                self?.apply(language: language, persistToPreferences: false)
+            }
+    }
+
+    private func apply(language: AppLanguage, persistToPreferences: Bool) {
+        guard self.language != language else { return }
         self.language = language
+        defaults.set(language.rawValue, forKey: FastFlowDefaultsKey.appLanguage)
+        if persistToPreferences {
+            syncedPreferencesStore?.setLanguage(language)
+        }
     }
 }
 

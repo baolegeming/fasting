@@ -16,8 +16,10 @@ enum FastFlowDefaultsKey {
     static let onboardingCompleted = "onboardingCompleted"
     static let notificationPermissionRequested = "notificationPermissionRequested"
     static let weightEntries = "weightEntries"
+    static let weightEntriesMigratedToSwiftData = "weightEntriesMigratedToSwiftData"
     static let appLanguage = "appLanguage"
     static let sessionFeedbackEntries = "sessionFeedbackEntries"
+    static let sessionFeedbackEntriesMigratedToSwiftData = "sessionFeedbackEntriesMigratedToSwiftData"
 }
 
 enum AbortReason: String, CaseIterable, Identifiable {
@@ -54,7 +56,7 @@ struct PhaseInfo: Identifiable, Equatable {
     let id: String
     let icon: String
     let nameKey: String
-    let timeRangeKey: String
+    let timeRangeKey: String?
     let descriptionKey: String
     let lowerBoundSec: TimeInterval
     let upperBoundSec: TimeInterval?
@@ -63,20 +65,51 @@ struct PhaseInfo: Identifiable, Equatable {
     let cardSymbol: String
 
     var name: String { AppL10n.string(nameKey) }
-    var timeRange: String { AppL10n.string(timeRangeKey) }
+    var timeRange: String {
+        if let timeRangeKey {
+            return AppL10n.string(timeRangeKey)
+        }
+        if let upperBoundSec {
+            return AppL10n.format(
+                "phase.time.range",
+                Int(lowerBoundSec / 3600),
+                Int(upperBoundSec / 3600)
+            )
+        }
+        return AppL10n.format("phase.time.goal", Int(lowerBoundSec / 3600))
+    }
     var description: String { AppL10n.string(descriptionKey) }
     var shortLabel: String { AppL10n.string(shortLabelKey) }
 
-    static let all: [PhaseInfo] = [
+    static let notificationPhaseIDs = [
+        "digesting",
+        "transition",
+        "metabolic_switch",
+        "fat_fuel",
+        "deep_cleanup",
+        "breakthrough",
+        "goal_reached"
+    ]
+
+    private struct Template {
+        let id: String
+        let icon: String
+        let nameKey: String
+        let descriptionKey: String
+        let lowerBoundSec: TimeInterval
+        let upperBoundSec: TimeInterval?
+        let shortLabelKey: String
+        let cardSymbol: String
+    }
+
+    private static let baseTemplates: [Template] = [
         .init(
             id: "digesting",
             icon: "🍽️",
             nameKey: "phase.digesting.name",
-            timeRangeKey: "phase.digesting.time",
             descriptionKey: "phase.digesting.desc",
             lowerBoundSec: 0,
             upperBoundSec: 4 * 3600,
-            stageIndex: 1,
             shortLabelKey: "phase.digesting.short",
             cardSymbol: "checkmark.circle.fill"
         ),
@@ -84,63 +117,114 @@ struct PhaseInfo: Identifiable, Equatable {
             id: "transition",
             icon: "🌙",
             nameKey: "phase.transition.name",
-            timeRangeKey: "phase.transition.time",
             descriptionKey: "phase.transition.desc",
             lowerBoundSec: 4 * 3600,
-            upperBoundSec: 8 * 3600,
-            stageIndex: 2,
+            upperBoundSec: 12 * 3600,
             shortLabelKey: "phase.transition.short",
             cardSymbol: "checkmark.circle.fill"
         ),
         .init(
             id: "metabolic_switch",
-            icon: "⚡️",
+            icon: "🔥",
             nameKey: "phase.metabolic_switch.name",
-            timeRangeKey: "phase.metabolic_switch.time",
             descriptionKey: "phase.metabolic_switch.desc",
-            lowerBoundSec: 8 * 3600,
-            upperBoundSec: 12 * 3600,
-            stageIndex: 3,
+            lowerBoundSec: 12 * 3600,
+            upperBoundSec: 14 * 3600,
             shortLabelKey: "phase.metabolic_switch.short",
-            cardSymbol: "bolt.fill"
+            cardSymbol: "flame.fill"
         ),
         .init(
             id: "fat_fuel",
-            icon: "🔥",
+            icon: "⚡️",
             nameKey: "phase.fat_fuel.name",
-            timeRangeKey: "phase.fat_fuel.time",
             descriptionKey: "phase.fat_fuel.desc",
-            lowerBoundSec: 12 * 3600,
+            lowerBoundSec: 14 * 3600,
             upperBoundSec: 16 * 3600,
-            stageIndex: 4,
             shortLabelKey: "phase.fat_fuel.short",
-            cardSymbol: "flame.fill"
+            cardSymbol: "bolt.fill"
         ),
         .init(
             id: "deep_cleanup",
             icon: "🫧",
             nameKey: "phase.deep_cleanup.name",
-            timeRangeKey: "phase.deep_cleanup.time",
             descriptionKey: "phase.deep_cleanup.desc",
             lowerBoundSec: 16 * 3600,
-            upperBoundSec: 24 * 3600,
-            stageIndex: 5,
+            upperBoundSec: 18 * 3600,
             shortLabelKey: "phase.deep_cleanup.short",
-            cardSymbol: "lock.fill"
+            cardSymbol: "drop.fill"
         ),
         .init(
             id: "breakthrough",
-            icon: "🚀",
+            icon: "⏳",
             nameKey: "phase.breakthrough.name",
-            timeRangeKey: "phase.breakthrough.time",
             descriptionKey: "phase.breakthrough.desc",
-            lowerBoundSec: 24 * 3600,
-            upperBoundSec: nil,
-            stageIndex: 6,
+            lowerBoundSec: 18 * 3600,
+            upperBoundSec: 24 * 3600,
             shortLabelKey: "phase.breakthrough.short",
-            cardSymbol: "lock.fill"
+            cardSymbol: "hourglass"
         )
     ]
+
+    static let placeholder = PhaseInfo(
+        id: "digesting",
+        icon: "🍽️",
+        nameKey: "phase.digesting.name",
+        timeRangeKey: nil,
+        descriptionKey: "phase.digesting.desc",
+        lowerBoundSec: 0,
+        upperBoundSec: 4 * 3600,
+        stageIndex: 1,
+        shortLabelKey: "phase.digesting.short",
+        cardSymbol: "checkmark.circle.fill"
+    )
+
+    static func detailPhases(forPlanType planType: String, targetDurationSec: Int) -> [PhaseInfo] {
+        guard !PlanOption.isCustom(type: planType) else {
+            return []
+        }
+
+        var phases: [PhaseInfo] = []
+        var stageIndex = 1
+
+        for template in baseTemplates {
+            guard template.lowerBoundSec < TimeInterval(targetDurationSec) else { break }
+            let clippedUpperBound = min(template.upperBoundSec ?? TimeInterval(targetDurationSec), TimeInterval(targetDurationSec))
+            guard clippedUpperBound > template.lowerBoundSec else { continue }
+
+            phases.append(
+                PhaseInfo(
+                    id: template.id,
+                    icon: template.icon,
+                    nameKey: template.nameKey,
+                    timeRangeKey: nil,
+                    descriptionKey: template.descriptionKey,
+                    lowerBoundSec: template.lowerBoundSec,
+                    upperBoundSec: clippedUpperBound,
+                    stageIndex: stageIndex,
+                    shortLabelKey: template.shortLabelKey,
+                    cardSymbol: template.cardSymbol
+                )
+            )
+            stageIndex += 1
+        }
+
+        phases.append(
+            PhaseInfo(
+                id: "goal_reached",
+                icon: "✅",
+                nameKey: "phase.goal_reached.name",
+                timeRangeKey: nil,
+                descriptionKey: "phase.goal_reached.desc",
+                lowerBoundSec: TimeInterval(targetDurationSec),
+                upperBoundSec: nil,
+                stageIndex: stageIndex,
+                shortLabelKey: "phase.goal_reached.short",
+                cardSymbol: "flag.fill"
+            )
+        )
+
+        return phases
+    }
 }
 
 struct FastFlowPhaseItem: Identifiable {
@@ -157,16 +241,15 @@ final class FastFlowTimerViewModel: ObservableObject {
     @Published var ringProgress: Double = 0.02
     @Published var timerEmoji: String = "⏱️"
     @Published var timerTitle: String = AppL10n.string("timer.ready.title")
-    @Published var currentPhase: PhaseInfo = PhaseInfo.all[0]
-    @Published var phaseModalInfo: PhaseInfo = PhaseInfo.all[0]
+    @Published var currentPhase: PhaseInfo = PhaseInfo.placeholder
+    @Published var phaseModalInfo: PhaseInfo = PhaseInfo.placeholder
     @Published var activeStageCount: Int = 0
-    @Published var phaseBadgeText: String = AppL10n.format("timer.stage.format", 0, 6)
-    @Published var phaseItems: [FastFlowPhaseItem] = PhaseInfo.all.map {
-        FastFlowPhaseItem(id: $0.id, title: $0.shortLabel, symbol: $0.cardSymbol)
-    }
+    @Published var phaseBadgeText: String = AppL10n.string("phase.badge.ready")
+    @Published var phaseItems: [FastFlowPhaseItem] = []
     @Published var showPhaseModal: Bool = false
     @Published var showEndFeedbackSheet: Bool = false
     @Published var pendingSessionResult: FastingSessionResultStatus?
+    @Published var completedShareCardContent: DailyCompletionShareCardContent?
     @Published var coachNote: FastingCoachNote?
     @Published var targetPlanType: String
     @Published var targetDurationSec: Int
@@ -175,8 +258,10 @@ final class FastFlowTimerViewModel: ObservableObject {
     private var elapsedSec: TimeInterval = 0
     private var lastPhaseId: String?
     private var timerCancellable: AnyCancellable?
+    private var preferencesCancellable: AnyCancellable?
     private var modelContext: ModelContext?
     private var currentRecordID: UUID?
+    private weak var syncedPreferencesStore: SyncedPreferencesStore?
 
     init() {
         let defaults = UserDefaults.standard
@@ -219,6 +304,18 @@ final class FastFlowTimerViewModel: ObservableObject {
         status == .fasting && elapsedSec >= TimeInterval(targetDurationSec)
     }
 
+    var showsDetailedPhases: Bool {
+        !PlanOption.isCustom(type: targetPlanType)
+    }
+
+    var currentPlanName: String {
+        PlanOption.displayName(forType: targetPlanType, durationSec: targetDurationSec)
+    }
+
+    var customProgressTargetHours: Int {
+        max(Int(round(Double(targetDurationSec) / 3600.0)), 1)
+    }
+
     deinit {
         timerCancellable?.cancel()
     }
@@ -228,6 +325,24 @@ final class FastFlowTimerViewModel: ObservableObject {
             self.modelContext = modelContext
             restoreOngoingFastIfNeeded()
         }
+    }
+
+    func configure(syncedPreferencesStore: SyncedPreferencesStore) {
+        guard self.syncedPreferencesStore == nil else { return }
+        self.syncedPreferencesStore = syncedPreferencesStore
+        synchronizeFromPreferences(syncedPreferencesStore.snapshot)
+        preferencesCancellable = syncedPreferencesStore.objectWillChange.sink { [weak self, weak syncedPreferencesStore] _ in
+            DispatchQueue.main.async {
+                guard let self, let syncedPreferencesStore else { return }
+                self.synchronizeFromPreferences(syncedPreferencesStore.snapshot)
+            }
+        }
+    }
+
+    func refreshFromSyncedPreferences() {
+        guard let syncedPreferencesStore else { return }
+        syncedPreferencesStore.refreshFromStore()
+        synchronizeFromPreferences(syncedPreferencesStore.snapshot)
     }
 
     func startFast() {
@@ -261,6 +376,10 @@ final class FastFlowTimerViewModel: ObservableObject {
         pendingSessionResult = nil
     }
 
+    func dismissCompletedShareCard() {
+        completedShareCardContent = nil
+    }
+
     func completeFast(
         subjectiveFeeling: FastingSubjectiveFeeling,
         completedObjectiveState: FastingCompletedObjectiveState,
@@ -289,6 +408,43 @@ final class FastFlowTimerViewModel: ObservableObject {
                 endAt: endedAt
             )
         )
+        if metGoal {
+            completedShareCardContent = buildCompletedShareCardContent(
+                startAt: startAt,
+                endAt: endedAt
+            )
+        }
+        resetToIdleState()
+    }
+
+    func finishCurrentFastWithoutFeedback() {
+        switch pendingSessionResult {
+        case .completed:
+            completeFastWithoutFeedback()
+        case .notCompleted:
+            endFastEarlyWithoutFeedback()
+        case .none:
+            dismissEndFeedbackSheet()
+        }
+    }
+
+    private func completeFastWithoutFeedback() {
+        let endedAt = Date()
+        guard let startAt else { return }
+        let duration = max(0, endedAt.timeIntervalSince(startAt))
+        let metGoal = duration >= TimeInterval(targetDurationSec)
+        updateCurrentRecord(
+            endedAt: endedAt,
+            status: FastingRecordStatus.completed,
+            isGoalMet: metGoal,
+            abortReason: nil
+        )
+        if metGoal {
+            completedShareCardContent = buildCompletedShareCardContent(
+                startAt: startAt,
+                endAt: endedAt
+            )
+        }
         resetToIdleState()
     }
 
@@ -324,6 +480,25 @@ final class FastFlowTimerViewModel: ObservableObject {
                 startAt: startAt,
                 endAt: endedAt
             )
+        )
+        resetToIdleState()
+    }
+
+    private func endFastEarlyWithoutFeedback() {
+        let endedAt = Date()
+        guard let startAt else { return }
+        let mappedReason = AbortReason.other
+        coachNote = FastingCoachingGuidance.noteAfterAbort(
+            reason: mappedReason,
+            planType: targetPlanType,
+            durationSec: targetDurationSec,
+            recommendedReminderMinute: recommendedStartReminderMinute(fallbackStartAt: startAt)
+        )
+        updateCurrentRecord(
+            endedAt: endedAt,
+            status: FastingRecordStatus.notCompleted,
+            isGoalMet: false,
+            abortReason: mappedReason.rawValue
         )
         resetToIdleState()
     }
@@ -438,6 +613,15 @@ final class FastFlowTimerViewModel: ObservableObject {
     }
 
     private func updatePhaseIfNeeded() {
+        guard showsDetailedPhases else {
+            let nextPhase = phase(for: elapsedSec)
+            currentPhase = nextPhase
+            phaseModalInfo = nextPhase
+            lastPhaseId = nextPhase.id
+            showPhaseModal = false
+            return
+        }
+
         let nextPhase = phase(for: elapsedSec)
         if currentPhase.id != nextPhase.id {
             currentPhase = nextPhase
@@ -457,19 +641,34 @@ final class FastFlowTimerViewModel: ObservableObject {
                 ? AppL10n.format("timer.remaining.format", formatShortDuration(remaining))
                 : AppL10n.string("timer.target.reached")
             ringProgress = min(max(elapsedSec / max(TimeInterval(targetDurationSec), 1), 0.02), 1.0)
-            timerEmoji = currentPhase.icon
-            timerTitle = currentPhase.name
-            activeStageCount = currentPhase.stageIndex
-            phaseBadgeText = AppL10n.format("timer.stage.format", currentPhase.stageIndex, 6)
+            if showsDetailedPhases {
+                let phases = detailedPhases()
+                phaseItems = phases.map {
+                    FastFlowPhaseItem(id: $0.id, title: $0.shortLabel, symbol: $0.cardSymbol)
+                }
+                timerEmoji = currentPhase.icon
+                timerTitle = currentPhase.name
+                activeStageCount = currentPhase.stageIndex
+                phaseBadgeText = currentPhase.name
+            } else {
+                phaseItems = []
+                timerEmoji = "⏱️"
+                timerTitle = AppL10n.string("timer.custom.in_progress")
+                activeStageCount = 0
+                phaseBadgeText = AppL10n.string("phase.custom.badge")
+            }
         } else {
             elapsedText = "00:00:00"
             remainingText = AppL10n.string("timer.ready.subtitle")
             ringProgress = 0.02
             timerEmoji = "⏱️"
             timerTitle = AppL10n.string("timer.ready.title")
-            currentPhase = PhaseInfo.all[0]
+            currentPhase = phase(for: 0)
             activeStageCount = 0
-            phaseBadgeText = AppL10n.format("timer.stage.format", 0, 6)
+            phaseItems = showsDetailedPhases ? detailedPhases().map {
+                FastFlowPhaseItem(id: $0.id, title: $0.shortLabel, symbol: $0.cardSymbol)
+            } : []
+            phaseBadgeText = showsDetailedPhases ? AppL10n.string("phase.badge.ready") : AppL10n.string("phase.custom.badge")
         }
     }
 
@@ -479,12 +678,17 @@ final class FastFlowTimerViewModel: ObservableObject {
             return
         }
         let defaults = UserDefaults.standard
+        let phasePushEnabled = syncedPreferencesStore?.phasePushEnabled
+            ?? defaults.bool(forKey: FastFlowDefaultsKey.phasePushEnabled)
+        let oneHourPushEnabled = syncedPreferencesStore?.oneHourPushEnabled
+            ?? defaults.bool(forKey: FastFlowDefaultsKey.oneHourPushEnabled)
         NotificationManager.shared.scheduleFastingNotifications(
             startAt: startAt,
             elapsedSec: elapsedSec,
             targetDurationSec: targetDurationSec,
-            phasePushEnabled: defaults.bool(forKey: FastFlowDefaultsKey.phasePushEnabled),
-            oneHourPushEnabled: defaults.bool(forKey: FastFlowDefaultsKey.oneHourPushEnabled)
+            phases: detailedPhases(),
+            phasePushEnabled: phasePushEnabled,
+            oneHourPushEnabled: oneHourPushEnabled
         )
     }
 
@@ -574,7 +778,37 @@ final class FastFlowTimerViewModel: ObservableObject {
         return (try? modelContext.fetch(descriptor)) ?? []
     }
 
+    private func buildCompletedShareCardContent(
+        startAt: Date,
+        endAt: Date
+    ) -> DailyCompletionShareCardContent {
+        DailyCompletionShareCardContent.make(
+            startAt: startAt,
+            endAt: endAt,
+            planType: targetPlanType,
+            targetDurationSec: targetDurationSec,
+            weeklyCompletedCount: completedSessionCountInRecentWeek(endingAt: endAt)
+        )
+    }
+
+    private func completedSessionCountInRecentWeek(endingAt date: Date) -> Int {
+        let calendar = Calendar.current
+        let startOfToday = calendar.startOfDay(for: date)
+        let intervalStart = calendar.date(byAdding: .day, value: -6, to: startOfToday) ?? startOfToday
+        let intervalEnd = calendar.date(byAdding: .day, value: 1, to: startOfToday) ?? date
+
+        return fetchAllRecords().filter { record in
+            guard FastingRecordStatus.isCompleted(record.status),
+                  record.isGoalMet,
+                  let endAt = record.endAt else {
+                return false
+            }
+            return endAt >= intervalStart && endAt < intervalEnd
+        }.count
+    }
+
     private func persistPlanDefaults(planType: String, durationSec: Int) {
+        syncedPreferencesStore?.updatePlan(planType: planType, durationSec: durationSec)
         UserDefaults.standard.set(planType, forKey: FastFlowDefaultsKey.targetPlanType)
         UserDefaults.standard.set(durationSec, forKey: FastFlowDefaultsKey.targetDurationSec)
         targetPlanType = planType
@@ -600,12 +834,14 @@ final class FastFlowTimerViewModel: ObservableObject {
 
     private func applyStartReminder(hour: Int, minute: Int, completion: @escaping (String) -> Void) {
         let defaults = UserDefaults.standard
+        syncedPreferencesStore?.setReminderTime(hour: hour, minute: minute)
         defaults.set(hour, forKey: FastFlowDefaultsKey.startReminderHour)
         defaults.set(minute, forKey: FastFlowDefaultsKey.startReminderMinute)
 
         NotificationManager.shared.getAuthorizationStatus { status in
             switch status {
             case .authorized, .provisional, .ephemeral:
+                self.syncedPreferencesStore?.setStartReminderEnabled(true)
                 defaults.set(true, forKey: FastFlowDefaultsKey.startReminderEnabled)
                 defaults.set(true, forKey: FastFlowDefaultsKey.notificationPermissionRequested)
                 NotificationManager.shared.scheduleStartReminder(hour: hour, minute: minute)
@@ -614,22 +850,44 @@ final class FastFlowTimerViewModel: ObservableObject {
                 NotificationManager.shared.requestAuthorization { granted in
                     defaults.set(true, forKey: FastFlowDefaultsKey.notificationPermissionRequested)
                     if granted {
+                        self.syncedPreferencesStore?.setStartReminderEnabled(true)
                         defaults.set(true, forKey: FastFlowDefaultsKey.startReminderEnabled)
                         NotificationManager.shared.scheduleStartReminder(hour: hour, minute: minute)
                         completion(AppL10n.format("coach.reminder.set", self.formattedReminderTime(hour: hour, minute: minute)))
                     } else {
+                        self.syncedPreferencesStore?.setStartReminderEnabled(false)
                         defaults.set(false, forKey: FastFlowDefaultsKey.startReminderEnabled)
                         completion(AppL10n.format("coach.reminder.saved_pending", self.formattedReminderTime(hour: hour, minute: minute)))
                     }
                 }
             case .denied:
+                self.syncedPreferencesStore?.setStartReminderEnabled(false)
                 defaults.set(false, forKey: FastFlowDefaultsKey.startReminderEnabled)
                 defaults.set(true, forKey: FastFlowDefaultsKey.notificationPermissionRequested)
                 completion(AppL10n.format("coach.reminder.saved_denied", self.formattedReminderTime(hour: hour, minute: minute)))
             @unknown default:
+                self.syncedPreferencesStore?.setStartReminderEnabled(false)
                 defaults.set(false, forKey: FastFlowDefaultsKey.startReminderEnabled)
                 completion(AppL10n.string("coach.reminder.saved_unknown"))
             }
+        }
+    }
+
+    private func applySyncedPreferencesSnapshot(_ snapshot: SyncedPreferencesSnapshot) {
+        targetPlanType = snapshot.planType
+        targetDurationSec = snapshot.targetDurationSec
+    }
+
+    private func synchronizeFromPreferences(_ snapshot: SyncedPreferencesSnapshot) {
+        applySyncedPreferencesSnapshot(snapshot)
+        NotificationManager.shared.reconcileStartReminder(
+            enabled: snapshot.startReminderEnabled,
+            hour: snapshot.startReminderHour,
+            minute: snapshot.startReminderMinute
+        )
+        refreshScheduledNotifications()
+        if status == .fasting {
+            syncDisplay(now: Date())
         }
     }
 
@@ -641,8 +899,17 @@ final class FastFlowTimerViewModel: ObservableObject {
         return formatter.string(from: date)
     }
 
+    func detailedPhases() -> [PhaseInfo] {
+        PhaseInfo.detailPhases(forPlanType: targetPlanType, targetDurationSec: targetDurationSec)
+    }
+
     private func phase(for elapsedSec: TimeInterval) -> PhaseInfo {
-        for phase in PhaseInfo.all {
+        let phases = detailedPhases()
+        guard let firstPhase = phases.first else {
+            return PhaseInfo.placeholder
+        }
+
+        for phase in phases {
             if let upperBound = phase.upperBoundSec {
                 if elapsedSec >= phase.lowerBoundSec && elapsedSec < upperBound {
                     return phase
@@ -651,7 +918,7 @@ final class FastFlowTimerViewModel: ObservableObject {
                 return phase
             }
         }
-        return PhaseInfo.all[0]
+        return firstPhase
     }
 
     private func formatHMS(_ seconds: TimeInterval) -> String {

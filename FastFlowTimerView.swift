@@ -69,11 +69,21 @@ struct FastFlowTimerView: View {
                         )
                         .padding(.top, 24)
 
-                        PhaseCardView(
-                            phaseBadgeText: viewModel.phaseBadgeText,
-                            activeStageCount: viewModel.activeStageCount,
-                            phaseItems: viewModel.phaseItems
-                        )
+                        if viewModel.showsDetailedPhases {
+                            PhaseCardView(
+                                phaseBadgeText: viewModel.phaseBadgeText,
+                                activeStageCount: viewModel.activeStageCount,
+                                phaseItems: viewModel.phaseItems
+                            )
+                        } else {
+                            CustomProgressCardView(
+                                badgeText: viewModel.phaseBadgeText,
+                                planName: viewModel.currentPlanName,
+                                progress: viewModel.ringProgress,
+                                elapsedText: viewModel.elapsedText,
+                                targetHours: viewModel.customProgressTargetHours
+                            )
+                        }
 
                         VStack(spacing: 12) {
                             ActionButtonsView(
@@ -127,6 +137,9 @@ struct FastFlowTimerView: View {
                                 feedbackStore: feedbackStore
                             )
                         },
+                        onSkip: {
+                            viewModel.finishCurrentFastWithoutFeedback()
+                        },
                         onCancel: {
                             viewModel.dismissEndFeedbackSheet()
                         }
@@ -136,9 +149,30 @@ struct FastFlowTimerView: View {
                     .presentationCornerRadius(28)
                 }
             }
-            .sheet(isPresented: $viewModel.showPhaseModal) {
+            .sheet(item: $viewModel.completedShareCardContent) { content in
+                DailyCompletionShareSheetView(
+                    content: content,
+                    onClose: {
+                        viewModel.dismissCompletedShareCard()
+                    }
+                )
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+                .presentationCornerRadius(28)
+            }
+            .sheet(
+                isPresented: Binding(
+                    get: { viewModel.showsDetailedPhases && viewModel.showPhaseModal },
+                    set: { newValue in
+                        if !newValue {
+                            viewModel.dismissPhaseModal()
+                        }
+                    }
+                )
+            ) {
                 PhaseModalSheetView(
                     phase: viewModel.phaseModalInfo,
+                    phaseSequence: viewModel.detailedPhases(),
                     onClose: {
                         viewModel.dismissPhaseModal()
                     }

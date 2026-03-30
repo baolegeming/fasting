@@ -4,6 +4,7 @@ struct EndFastFeedbackSheetView: View {
     let resultStatus: FastingSessionResultStatus
     let onComplete: (FastingSubjectiveFeeling, FastingCompletedObjectiveState) -> Void
     let onEndEarly: (FastingSubjectiveFeeling, FastingNotCompletedReason) -> Void
+    let onSkip: () -> Void
     let onCancel: () -> Void
 
     @State private var subjectiveFeeling: FastingSubjectiveFeeling?
@@ -97,6 +98,25 @@ struct EndFastFeedbackSheetView: View {
         VStack(spacing: 12) {
             Divider()
                 .overlay(Color.white.opacity(0.08))
+
+            Button {
+                onSkip()
+            } label: {
+                Text(AppL10n.string("session.feedback.skip"))
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.9))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(
+                        RoundedRectangle(cornerRadius: 14)
+                            .fill(Color.white.opacity(0.06))
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 14)
+                            .stroke(Color.white.opacity(0.08), lineWidth: 1)
+                    )
+            }
+            .buttonStyle(.plain)
 
             Button {
                 submit()
@@ -215,6 +235,7 @@ extension FastingNotCompletedReason: FeedbackOptionTitleProviding {
         resultStatus: .completed,
         onComplete: { _, _ in },
         onEndEarly: { _, _ in },
+        onSkip: {},
         onCancel: {}
     )
     .preferredColorScheme(.dark)

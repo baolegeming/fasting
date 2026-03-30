@@ -8,8 +8,7 @@ struct WeeklyReportSheetView: View {
     @EnvironmentObject private var viewModel: FastFlowTimerViewModel
     @State private var showActionAlert = false
     @State private var actionAlertMessage = ""
-    @State private var showShareSheet = false
-    @State private var shareItems: [Any] = []
+    @State private var sharePreviewPayload: SharePreviewPayload?
 
     private let primary = Color(hex: "ec5b13")
     private let backgroundDark = Color(hex: "121212")
@@ -30,7 +29,7 @@ struct WeeklyReportSheetView: View {
                 .padding(.bottom, 24)
             }
             .background(backgroundDark.ignoresSafeArea())
-            .navigationTitle(AppL10n.string("Weekly Report"))
+            .navigationTitle(AppL10n.string("weekly.report.title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -54,8 +53,14 @@ struct WeeklyReportSheetView: View {
                 Text(actionAlertMessage)
             }
             .toolbarColorScheme(.dark, for: .navigationBar)
-            .sheet(isPresented: $showShareSheet) {
-                ActivityShareSheetView(activityItems: shareItems)
+            .sheet(item: $sharePreviewPayload) { payload in
+                ShareImagePreviewSheetView(
+                    image: payload.image,
+                    activityItems: payload.activityItems,
+                    onClose: {
+                        sharePreviewPayload = nil
+                    }
+                )
             }
         }
     }
@@ -256,7 +261,10 @@ struct WeeklyReportSheetView: View {
     }
 
     private var totalHoursText: String {
-        AppL10n.format("weekly.share.hours", Double(report.totalFastingSeconds) / 3600.0)
+        AppL10n.format(
+            "weekly.share.hours",
+            String(format: "%.1f", Double(report.totalFastingSeconds) / 3600.0)
+        )
     }
 
     private var reportRangeText: String {
@@ -332,23 +340,18 @@ struct WeeklyReportSheetView: View {
     }
 
     private func prepareShareCard() {
-        let content = WeeklyReportShareCardView(report: report)
-            .preferredColorScheme(.dark)
-
-        let renderer = ImageRenderer(content: content)
-        renderer.scale = 3
-
-        if let image = renderer.uiImage {
-            shareItems = [image, shareCaption]
-            showShareSheet = true
+        let shareContent = WeeklyShareCardContent.make(report: report)
+        if let image = renderShareImage(content: {
+            WeeklyReportShareCardView(content: shareContent)
+        }) {
+            sharePreviewPayload = SharePreviewPayload(
+                image: image,
+                activityItems: [image, shareContent.shareCaption]
+            )
         } else {
             actionAlertMessage = AppL10n.string("weekly.share.failed")
             showActionAlert = true
         }
-    }
-
-    private var shareCaption: String {
-        AppL10n.format("weekly.share.caption", report.headline)
     }
 }
 

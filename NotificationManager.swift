@@ -46,17 +46,36 @@ final class NotificationManager {
         center.removePendingNotificationRequests(withIdentifiers: [startReminderID])
     }
 
+    func reconcileStartReminder(enabled: Bool, hour: Int, minute: Int) {
+        getAuthorizationStatus { [weak self] status in
+            guard let self else { return }
+            switch status {
+            case .authorized, .provisional, .ephemeral:
+                if enabled {
+                    self.scheduleStartReminder(hour: hour, minute: minute)
+                } else {
+                    self.cancelStartReminder()
+                }
+            case .denied, .notDetermined:
+                self.cancelStartReminder()
+            @unknown default:
+                self.cancelStartReminder()
+            }
+        }
+    }
+
     func scheduleFastingNotifications(
         startAt: Date,
         elapsedSec: TimeInterval,
         targetDurationSec: Int,
+        phases: [PhaseInfo],
         phasePushEnabled: Bool,
         oneHourPushEnabled: Bool
     ) {
         cancelAllFastingNotifications()
 
         if phasePushEnabled {
-            for phase in PhaseInfo.all where phase.lowerBoundSec > elapsedSec && phase.lowerBoundSec > 0 {
+            for phase in phases where phase.lowerBoundSec > elapsedSec && phase.lowerBoundSec > 0 {
                 schedulePhaseNotification(phase: phase, fireAt: startAt.addingTimeInterval(phase.lowerBoundSec))
             }
         }
@@ -95,7 +114,7 @@ final class NotificationManager {
     }
 
     func cancelAllFastingNotifications() {
-        let identifiers = [oneHourRemainingID] + PhaseInfo.all.map { phaseReminderPrefix + $0.id }
+        let identifiers = [oneHourRemainingID] + PhaseInfo.notificationPhaseIDs.map { phaseReminderPrefix + $0 }
         center.removePendingNotificationRequests(withIdentifiers: identifiers)
     }
 }

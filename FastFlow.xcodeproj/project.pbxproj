@@ -19,6 +19,7 @@
 		48F3C74A9B5774DEBE3EFAC6 /* FastingRecordEditorSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49553D6A2E0D552881ACE8C /* FastingRecordEditorSheetView.swift */; };
 		4A26CEF2AB83672C45C7BAA1 /* NativeAdSlotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCFA1E593AB3ED11669785C /* NativeAdSlotView.swift */; };
 		4D94687A02D89C8C36E2E75E /* FastingCoachingGuidance.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD9DBA617C07EA40784CC61 /* FastingCoachingGuidance.swift */; };
+		4DDDC2ADABC70E2BE29430B1 /* SyncedPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = F875D83BF5A2808741244FB6 /* SyncedPreferences.swift */; };
 		5E70330CB8BC33EDAC5C0C55 /* OngoingFastCorrectionSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B65EC99B5790290915C31AE /* OngoingFastCorrectionSheetView.swift */; };
 		5F94C7B257807FB7DAA369FB /* AdMobNativeAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C7F8E0AE78A2C3B27CB681 /* AdMobNativeAdView.swift */; };
 		60DC3261B860ED3BB0BA209D /* FastingEducationContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5281CFAF6934714A4DB5B3C8 /* FastingEducationContent.swift */; };
@@ -37,6 +38,7 @@
 		B2D77894801F29F38F3AF106 /* EndFastFeedbackSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7F5CEB43421EA0F5C225E3 /* EndFastFeedbackSheetView.swift */; };
 		B47FCD9FA99138226FE6AED2 /* WeeklyReportShareCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB9325AE17DE5DA692F0520 /* WeeklyReportShareCardView.swift */; };
 		B8A45218011ED5B3492A8D8D /* FastFlowModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58A1CAA3F84B6AE87C03EC9 /* FastFlowModels.swift */; };
+		BC6D8DE8CA28FFE36DE662E1 /* CloudSyncRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = A746E5A0DFCDAA262E92B442 /* CloudSyncRuntime.swift */; };
 		BF0D2A872098CD07B8F19375 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A99E99E5B5306A0A9E1D8D4 /* Assets.xcassets */; };
 		C15257EBA4F3571F0D264F51 /* WeightTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D38FA8EAF9AAE5697336DA4 /* WeightTracking.swift */; };
 		C5EC5EFDEC04525C2B28D36F /* FastFlowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D91B3BB289EDBD45084BDA80 /* FastFlowApp.swift */; };
@@ -79,6 +81,7 @@
 		A403ED06A3E9E3EA0BDC28AC /* PlanOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanOption.swift; sourceTree = "<group>"; };
 		A4A25BCAB8513A9F4636745D /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		A58A1CAA3F84B6AE87C03EC9 /* FastFlowModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastFlowModels.swift; sourceTree = "<group>"; };
+		A746E5A0DFCDAA262E92B442 /* CloudSyncRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncRuntime.swift; sourceTree = "<group>"; };
 		AC1DFC28C5DA882A4D9F51A5 /* HistoryFilterSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryFilterSheetView.swift; sourceTree = "<group>"; };
 		ADCFA1E593AB3ED11669785C /* NativeAdSlotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdSlotView.swift; sourceTree = "<group>"; };
 		B49553D6A2E0D552881ACE8C /* FastingRecordEditorSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastingRecordEditorSheetView.swift; sourceTree = "<group>"; };
@@ -93,6 +96,7 @@
 		F19E9EB761D837ADC1290029 /* CustomPlanSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPlanSheetView.swift; sourceTree = "<group>"; };
 		F634B31B4C9832654B679B8F /* TimerRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerRingView.swift; sourceTree = "<group>"; };
 		F81680C32BD183EA747A7A29 /* Monetization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monetization.swift; sourceTree = "<group>"; };
+		F875D83BF5A2808741244FB6 /* SyncedPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncedPreferences.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +128,7 @@
 				290E27D52EF38973D047FC21 /* ActivityShareSheetView.swift */,
 				13C7F8E0AE78A2C3B27CB681 /* AdMobNativeAdView.swift */,
 				3814C43B9B960FBCAD71CB61 /* AppLanguage.swift */,
+				A746E5A0DFCDAA262E92B442 /* CloudSyncRuntime.swift */,
 				F19E9EB761D837ADC1290029 /* CustomPlanSheetView.swift */,
 				BB7F5CEB43421EA0F5C225E3 /* EndFastFeedbackSheetView.swift */,
 				D91B3BB289EDBD45084BDA80 /* FastFlowApp.swift */,
@@ -151,6 +156,7 @@
 				E6345B4D2B29FA349DE4F432 /* SettingsView.swift */,
 				780839B0F94921EFE00ED8D3 /* StatsView.swift */,
 				2790FC90E1BCB1FCC01BBA19 /* SubscriptionRuntime.swift */,
+				F875D83BF5A2808741244FB6 /* SyncedPreferences.swift */,
 				F634B31B4C9832654B679B8F /* TimerRingView.swift */,
 				5CB9325AE17DE5DA692F0520 /* WeeklyReportShareCardView.swift */,
 				59189CC7C610CA162C74F65E /* WeeklyReportSheetView.swift */,
@@ -266,6 +272,7 @@
 				75E54A84BBF4A15795571279 /* ActivityShareSheetView.swift in Sources */,
 				5F94C7B257807FB7DAA369FB /* AdMobNativeAdView.swift in Sources */,
 				8691DAD01B56245A6A635E13 /* AppLanguage.swift in Sources */,
+				BC6D8DE8CA28FFE36DE662E1 /* CloudSyncRuntime.swift in Sources */,
 				A5A95B014C52F862C2AE8B2D /* CustomPlanSheetView.swift in Sources */,
 				B2D77894801F29F38F3AF106 /* EndFastFeedbackSheetView.swift in Sources */,
 				C5EC5EFDEC04525C2B28D36F /* FastFlowApp.swift in Sources */,
@@ -293,6 +300,7 @@
 				0BEFA0396B7471971FF188D3 /* SettingsView.swift in Sources */,
 				0DCB073E25F49528AC7F9C25 /* StatsView.swift in Sources */,
 				3DD53AC150D0922370727261 /* SubscriptionRuntime.swift in Sources */,
+				4DDDC2ADABC70E2BE29430B1 /* SyncedPreferences.swift in Sources */,
 				D055C7954570C6345A135302 /* TimerRingView.swift in Sources */,
 				B47FCD9FA99138226FE6AED2 /* WeeklyReportShareCardView.swift in Sources */,
 				F84CE6309F9009D5E6B33E12 /* WeeklyReportSheetView.swift in Sources */,
@@ -321,6 +329,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FastFlow.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P4U4BC35AW;
@@ -404,6 +413,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FastFlow.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P4U4BC35AW;

@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import SwiftData
 
 enum FastingSessionResultStatus: String, Codable, CaseIterable, Identifiable, Hashable {
     case completed
@@ -167,20 +168,61 @@ final class FastingSessionFeedbackStore: ObservableObject {
     private let defaults: UserDefaults
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
+    private let modelContext: ModelContext?
 
-    init(defaults: UserDefaults = .standard) {
+    init(
+        modelContext: ModelContext? = nil,
+        defaults: UserDefaults = .standard
+    ) {
+        self.modelContext = modelContext
         self.defaults = defaults
-        load()
+        if modelContext != nil {
+            importLegacyEntriesIfNeeded()
+            refreshFromStore()
+        } else {
+            loadLegacyEntries()
+        }
     }
 
     func upsert(_ entry: FastingSessionFeedbackEntry) {
-        if let index = entries.firstIndex(where: { $0.recordID == entry.recordID }) {
-            entries[index] = entry
+        if let modelContext {
+            if let existingRecord = record(for: entry.recordID, in: modelContext) {
+                existingRecord.recordedAt = entry.recordedAt
+                existingRecord.resultStatusRaw = entry.resultStatus.rawValue
+                existingRecord.subjectiveFeelingRaw = entry.subjectiveFeeling.rawValue
+                existingRecord.completedObjectiveStateRaw = entry.completedObjectiveState?.rawValue
+                existingRecord.notCompletedReasonRaw = entry.notCompletedReason?.rawValue
+                existingRecord.planType = entry.planType
+                existingRecord.targetDurationSec = entry.targetDurationSec
+                existingRecord.startAt = entry.startAt
+                existingRecord.endAt = entry.endAt
+            } else {
+                let record = SessionFeedbackRecord(
+                    id: entry.id,
+                    recordID: entry.recordID,
+                    recordedAt: entry.recordedAt,
+                    resultStatusRaw: entry.resultStatus.rawValue,
+                    subjectiveFeelingRaw: entry.subjectiveFeeling.rawValue,
+                    completedObjectiveStateRaw: entry.completedObjectiveState?.rawValue,
+                    notCompletedReasonRaw: entry.notCompletedReason?.rawValue,
+                    planType: entry.planType,
+                    targetDurationSec: entry.targetDurationSec,
+                    startAt: entry.startAt,
+                    endAt: entry.endAt
+                )
+                modelContext.insert(record)
+            }
+            saveChanges()
+            refreshFromStore()
         } else {
-            entries.append(entry)
+            if let index = entries.firstIndex(where: { $0.recordID == entry.recordID }) {
+                entries[index] = entry
+            } else {
+                entries.append(entry)
+            }
+            entries.sort { $0.recordedAt > $1.recordedAt }
+            persistLegacyEntries()
         }
-        entries.sort { $0.recordedAt > $1.recordedAt }
-        persist()
     }
 
     func entry(for recordID: UUID) -> FastingSessionFeedbackEntry? {
@@ -188,11 +230,17 @@ final class FastingSessionFeedbackStore: ObservableObject {
     }
 
     func delete(recordID: UUID) {
-        entries.removeAll { $0.recordID == recordID }
-        persist()
+        if let modelContext, let record = record(for: recordID, in: modelContext) {
+            modelContext.delete(record)
+            saveChanges()
+            refreshFromStore()
+        } else {
+            entries.removeAll { $0.recordID == recordID }
+            persistLegacyEntries()
+        }
     }
 
-    private func load() {
+    private func loadLegacyEntries() {
         guard let data = defaults.data(forKey: FastFlowDefaultsKey.sessionFeedbackEntries) else {
             entries = []
             return
@@ -206,8 +254,121 @@ final class FastingSessionFeedbackStore: ObservableObject {
         }
     }
 
-    private func persist() {
+    private func persistLegacyEntries() {
         guard let data = try? encoder.encode(entries) else { return }
         defaults.set(data, forKey: FastFlowDefaultsKey.sessionFeedbackEntries)
+    }
+
+    func refreshFromStore() {
+        guard let modelContext else {
+            entries = []
+            return
+        }
+
+        do {
+            let descriptor = FetchDescriptor<SessionFeedbackRecord>(
+                sortBy: [SortDescriptor(\.recordedAt, order: .reverse)]
+            )
+            let records = try modelContext.fetch(descriptor)
+            entries = records.compactMap { record in
+                guard
+                    let resultStatus = FastingSessionResultStatus(rawValue: record.resultStatusRaw),
+                    let subjectiveFeeling = FastingSubjectiveFeeling(rawValue: record.subjectiveFeelingRaw)
+                else {
+                    return nil
+                }
+
+                return FastingSessionFeedbackEntry(
+                    id: record.id,
+                    recordID: record.recordID,
+                    recordedAt: record.recordedAt,
+                    resultStatus: resultStatus,
+                    subjectiveFeeling: subjectiveFeeling,
+                    completedObjectiveState: record.completedObjectiveStateRaw.flatMap(FastingCompletedObjectiveState.init(rawValue:)),
+                    notCompletedReason: record.notCompletedReasonRaw.flatMap(FastingNotCompletedReason.init(rawValue:)),
+                    planType: record.planType,
+                    targetDurationSec: record.targetDurationSec,
+                    startAt: record.startAt,
+                    endAt: record.endAt
+                )
+            }
+                .sorted { $0.recordedAt > $1.recordedAt }
+        } catch {
+            entries = []
+        }
+    }
+
+    private func importLegacyEntriesIfNeeded() {
+        guard let modelContext else { return }
+
+        let alreadyMigrated = defaults.bool(forKey: FastFlowDefaultsKey.sessionFeedbackEntriesMigratedToSwiftData)
+        guard !alreadyMigrated else { return }
+
+        let legacyEntries = decodeLegacyEntries()
+        guard !legacyEntries.isEmpty else {
+            defaults.set(true, forKey: FastFlowDefaultsKey.sessionFeedbackEntriesMigratedToSwiftData)
+            return
+        }
+
+        do {
+            let existingRecords = try modelContext.fetch(FetchDescriptor<SessionFeedbackRecord>())
+            let existingRecordIDs = Set(existingRecords.map(\.recordID))
+
+            for entry in legacyEntries where !existingRecordIDs.contains(entry.recordID) {
+                let record = SessionFeedbackRecord(
+                    id: entry.id,
+                    recordID: entry.recordID,
+                    recordedAt: entry.recordedAt,
+                    resultStatusRaw: entry.resultStatus.rawValue,
+                    subjectiveFeelingRaw: entry.subjectiveFeeling.rawValue,
+                    completedObjectiveStateRaw: entry.completedObjectiveState?.rawValue,
+                    notCompletedReasonRaw: entry.notCompletedReason?.rawValue,
+                    planType: entry.planType,
+                    targetDurationSec: entry.targetDurationSec,
+                    startAt: entry.startAt,
+                    endAt: entry.endAt
+                )
+                modelContext.insert(record)
+            }
+
+            if modelContext.hasChanges {
+                try modelContext.save()
+            }
+
+            defaults.set(true, forKey: FastFlowDefaultsKey.sessionFeedbackEntriesMigratedToSwiftData)
+        } catch {
+            return
+        }
+    }
+
+    private func decodeLegacyEntries() -> [FastingSessionFeedbackEntry] {
+        guard let data = defaults.data(forKey: FastFlowDefaultsKey.sessionFeedbackEntries) else {
+            return []
+        }
+
+        do {
+            return try decoder.decode([FastingSessionFeedbackEntry].self, from: data)
+                .sorted { $0.recordedAt > $1.recordedAt }
+        } catch {
+            return []
+        }
+    }
+
+    private func record(for recordID: UUID, in modelContext: ModelContext) -> SessionFeedbackRecord? {
+        let descriptor = FetchDescriptor<SessionFeedbackRecord>(
+            predicate: #Predicate { $0.recordID == recordID }
+        )
+        return try? modelContext.fetch(descriptor).first
+    }
+
+    private func saveChanges() {
+        guard let modelContext else { return }
+        do {
+            if modelContext.hasChanges {
+                try modelContext.save()
+            }
+        } catch {
+            return
+        }
     }
 }

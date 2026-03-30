@@ -11,7 +11,7 @@ struct PhaseCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
-                Text("Fast Phases")
+                Text(AppL10n.string("phase.card.title"))
                     .font(.system(size: 12, weight: .bold))
                     .foregroundStyle(.gray)
                     .textCase(.uppercase)
@@ -25,7 +25,7 @@ struct PhaseCardView: View {
             }
 
             HStack(spacing: 6) {
-                ForEach(0..<6, id: \.self) { index in
+                ForEach(0..<phaseItems.count, id: \.self) { index in
                     Capsule()
                         .fill(index < activeStageCount ? primary : Color.gray.opacity(0.35))
                         .frame(height: 6)
@@ -66,13 +66,60 @@ struct PhaseCardView: View {
     }
 }
 
+struct CustomProgressCardView: View {
+    let badgeText: String
+    let planName: String
+    let progress: Double
+    let elapsedText: String
+    let targetHours: Int
+
+    private let primary = Color(hex: "ec5b13")
+    private let cardDark = Color(hex: "1C1C1E")
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                Text(AppL10n.string("phase.custom.title"))
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(.gray)
+                    .textCase(.uppercase)
+                Spacer()
+                Text(badgeText)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(primary)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(primary.opacity(0.12), in: Capsule())
+            }
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text(planName)
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundStyle(.white)
+                Text(AppL10n.format("phase.custom.elapsed", elapsedText))
+                    .font(.system(size: 13))
+                    .foregroundStyle(.gray)
+            }
+
+            ProgressView(value: min(max(progress, 0), 1))
+                .tint(primary)
+
+            Text(AppL10n.format("phase.custom.target", targetHours))
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(.gray)
+        }
+        .padding(20)
+        .background(cardDark, in: RoundedRectangle(cornerRadius: 18))
+    }
+}
+
 #Preview {
     ZStack {
         Color(hex: "0F0F0F").ignoresSafeArea()
         PhaseCardView(
-            phaseBadgeText: "Stage 3 of 6",
+            phaseBadgeText: "开始燃脂",
             activeStageCount: 3,
-            phaseItems: PhaseInfo.all.map {
+            phaseItems: PhaseInfo.detailPhases(forPlanType: PlanOption.plan18_6.type, targetDurationSec: PlanOption.plan18_6.durationSec).map {
                 FastFlowPhaseItem(id: $0.id, title: $0.shortLabel, symbol: $0.cardSymbol)
             }
         )

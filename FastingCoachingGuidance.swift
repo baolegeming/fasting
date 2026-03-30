@@ -286,13 +286,20 @@ enum FastingCoachingGuidance {
     }
 
     private static func startReminderAction(minutesFromMidnight: Int) -> FastingCoachAction {
-        let hour = minutesFromMidnight / 60
-        let minute = minutesFromMidnight % 60
+        let roundedMinutes = roundedReminderMinute(minutesFromMidnight)
+        let hour = roundedMinutes / 60
+        let minute = roundedMinutes % 60
         return FastingCoachAction(
             title: AppL10n.format("coach.action.reminder.title", formattedClockTime(hour: hour, minute: minute)),
             detail: AppL10n.string("coach.action.reminder.detail"),
             kind: .scheduleStartReminder(hour: hour, minute: minute)
         )
+    }
+
+    private static func roundedReminderMinute(_ minutesFromMidnight: Int) -> Int {
+        let dayMinutes = 24 * 60
+        let normalized = ((minutesFromMidnight % dayMinutes) + dayMinutes) % dayMinutes
+        return ((normalized + 2) / 5) * 5 % dayMinutes
     }
 
     private static func minutesFromMidnight(for date: Date) -> Int {

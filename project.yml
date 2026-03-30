@@ -67,6 +67,8 @@ targets:
           UIColorName: ""
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
+        UIBackgroundModes:
+          - remote-notification
     dependencies:
       - package: GoogleMobileAds
         product: GoogleMobileAds
@@ -79,6 +81,7 @@ targets:
         INFOPLIST_FILE: Info.plist
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: P4U4BC35AW
+        CODE_SIGN_ENTITLEMENTS: FastFlow.entitlements
       configs:
         Debug:
           FASTFLOW_GAD_APPLICATION_IDENTIFIER: ca-app-pub-3940256099942544~1458002511

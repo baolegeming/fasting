@@ -2,6 +2,7 @@ import SwiftUI
 
 struct PhaseModalSheetView: View {
     let phase: PhaseInfo
+    let phaseSequence: [PhaseInfo]
     let onClose: () -> Void
 
     private let primary = Color(hex: "ec5b13")
@@ -45,7 +46,7 @@ struct PhaseModalSheetView: View {
                     Button {
                         onClose()
                     } label: {
-                        Text(AppL10n.string("Keep Going!"))
+                        Text(AppL10n.string("phase.modal.cta"))
                             .font(.system(size: 18, weight: .bold))
                             .foregroundStyle(.white)
                             .frame(maxWidth: .infinity)
@@ -64,7 +65,7 @@ struct PhaseModalSheetView: View {
 
     private var phaseOverview: some View {
         HStack(spacing: 8) {
-            ForEach(PhaseInfo.all) { item in
+            ForEach(phaseSequence) { item in
                 VStack(spacing: 6) {
                     Text(item.icon)
                         .font(.system(size: 18))
@@ -81,12 +82,12 @@ struct PhaseModalSheetView: View {
 
     private var educationalGuardrailCard: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(AppL10n.string("How to Read This Phase"))
+            Text(AppL10n.string("phase.modal.how_to_read"))
                 .font(.system(size: 11, weight: .bold))
                 .foregroundStyle(primary)
                 .textCase(.uppercase)
                 .tracking(0.8)
-            Text(AppL10n.string("These phase cues are based on fasting duration. They help explain progress and rhythm, but they are not a medical diagnosis."))
+            Text(AppL10n.string("phase.modal.disclaimer"))
                 .font(.system(size: 13, weight: .medium))
                 .foregroundStyle(.white)
                 .lineSpacing(3)
@@ -103,7 +104,9 @@ struct PhaseModalSheetView: View {
                 .stroke(Color.white.opacity(0.06), lineWidth: 1)
         )
     }
+}
 
+extension PhaseModalSheetView {
     private var guidanceCard: some View {
         let guidance = FastingCoachingGuidance.phaseGuidance(for: phase)
 
@@ -152,7 +155,17 @@ struct PhaseModalSheetView: View {
         Color.black.opacity(0.7).ignoresSafeArea()
         VStack {
             Spacer()
-            PhaseModalSheetView(phase: PhaseInfo.all[3], onClose: {})
+            PhaseModalSheetView(
+                phase: PhaseInfo.detailPhases(
+                    forPlanType: PlanOption.plan18_6.type,
+                    targetDurationSec: PlanOption.plan18_6.durationSec
+                )[3],
+                phaseSequence: PhaseInfo.detailPhases(
+                    forPlanType: PlanOption.plan18_6.type,
+                    targetDurationSec: PlanOption.plan18_6.durationSec
+                ),
+                onClose: {}
+            )
         }
     }
     .preferredColorScheme(.dark)

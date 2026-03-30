@@ -66,6 +66,11 @@ enum PlanOption: CaseIterable {
         return hours
     }
 
+    static func normalizedCustomFastingHours(for durationSec: Int) -> Int {
+        let roundedHours = Int((Double(durationSec) / 3600.0).rounded())
+        return min(max(roundedHours, 12), 23)
+    }
+
     static func gentlerRecommendation(forType type: String, durationSec: Int) -> (planType: String, durationSec: Int)? {
         if isCustom(type: type), let fastingHours = customFastingHours(for: durationSec) {
             let gentlerHours = max(12, fastingHours - 2)

@@ -63,7 +63,7 @@ struct StatsView: View {
                     .padding(.bottom, 24)
                 }
             }
-            .navigationTitle("Insights")
+            .navigationTitle(AppL10n.string("stats.title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(backgroundDark, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
@@ -73,6 +73,7 @@ struct StatsView: View {
             }
             .sheet(isPresented: $showWeeklyReport) {
                 WeeklyReportSheetView(report: weeklyReport)
+                    .environmentObject(viewModel)
             }
             .sheet(isPresented: $showWeightEntrySheet) {
                 WeightEntrySheetView(
@@ -97,13 +98,13 @@ struct StatsView: View {
     private var durationCard: some View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Daily Fasting Hours")
+                Text(AppL10n.string("stats.daily_hours.title"))
                     .font(.system(size: 14, weight: .medium))
                     .foregroundStyle(.gray)
                 Text(averageDailyHoursText)
                     .font(.system(size: 28, weight: .bold))
                     .foregroundStyle(.white)
-                Text("最近 7 天按自然日拆分统计，用来看每天实际处于空腹状态的时长。")
+                Text(AppL10n.string("stats.daily_hours.subtitle"))
                     .font(.system(size: 12))
                     .foregroundStyle(.gray)
             }
@@ -145,8 +146,8 @@ struct StatsView: View {
             }
 
             HStack(spacing: 10) {
-                compactMetric(title: "7-Day Total", value: totalDailyHoursText)
-                compactMetric(title: "Active Days", value: "\(activeFastingDayCount)/7")
+                compactMetric(title: AppL10n.string("stats.daily_hours.total"), value: totalDailyHoursText)
+                compactMetric(title: AppL10n.string("stats.daily_hours.active_days"), value: "\(activeFastingDayCount)/7")
             }
         }
         .padding(16)
@@ -160,18 +161,18 @@ struct StatsView: View {
     private var completionCard: some View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Completion Summary")
+                Text(AppL10n.string("stats.completion.title"))
                     .font(.system(size: 14, weight: .medium))
                     .foregroundStyle(.gray)
-                Text("完成类指标按断食结束日期统计")
+                Text(AppL10n.string("stats.completion.subtitle"))
                     .font(.system(size: 12))
                     .foregroundStyle(.gray)
             }
 
             HStack(spacing: 10) {
-                compactMetric(title: "This Week", value: "\(thisWeekGoalCount)/7")
-                compactMetric(title: "Best Streak", value: "\(bestStreak)d")
-                compactMetric(title: "Completed", value: "\(recentCompletedSessionCount)")
+                compactMetric(title: AppL10n.string("stats.completion.this_week"), value: "\(thisWeekGoalCount)/7")
+                compactMetric(title: AppL10n.string("stats.completion.best_streak"), value: "\(bestStreak)d")
+                compactMetric(title: AppL10n.string("stats.completion.completed"), value: "\(recentCompletedSessionCount)")
             }
 
             HStack(spacing: 8) {
@@ -189,7 +190,7 @@ struct StatsView: View {
                 }
             }
 
-            Text("绿色表示当天完成过目标，红色表示当天有中断记录，橙色表示今天仍有进行中的断食。")
+            Text(AppL10n.string("stats.completion.legend"))
                 .font(.system(size: 12))
                 .foregroundStyle(.gray)
         }
@@ -204,26 +205,26 @@ struct StatsView: View {
     private var startConsistencyCard: some View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Start Time Consistency")
+                Text(AppL10n.string("stats.start_consistency.title"))
                     .font(.system(size: 14, weight: .medium))
                     .foregroundStyle(.gray)
-                Text("基于每天持续时间最长的那次断食开始时间统计。")
+                Text(AppL10n.string("stats.start_consistency.subtitle"))
                     .font(.system(size: 12))
                     .foregroundStyle(.gray)
             }
 
             HStack(spacing: 10) {
-                compactMetric(title: "Typical Start", value: typicalStartText)
-                compactMetric(title: "Avg Drift", value: averageDriftText)
+                compactMetric(title: AppL10n.string("stats.start_consistency.typical_start"), value: typicalStartText)
+                compactMetric(title: AppL10n.string("stats.start_consistency.avg_drift"), value: averageDriftText)
                 compactMetric(
-                    title: "Rhythm",
+                    title: AppL10n.string("stats.start_consistency.rhythm"),
                     value: startConsistency.rhythmLabel,
                     valueColor: rhythmColor(for: startConsistency.rhythmLabel)
                 )
             }
 
             if startConsistency.samples.isEmpty {
-                Text("开始几次断食后，这里会显示你的开始时间节奏。")
+                Text(AppL10n.string("stats.start_consistency.empty"))
                     .font(.system(size: 13))
                     .foregroundStyle(.gray)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -263,7 +264,7 @@ struct StatsView: View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Weekly Report")
+                    Text(AppL10n.string("weekly.report.title"))
                         .font(.system(size: 14, weight: .medium))
                         .foregroundStyle(.gray)
                     Text(weeklyReport.headline)
@@ -271,7 +272,7 @@ struct StatsView: View {
                         .foregroundStyle(.white)
                 }
                 Spacer()
-                Button("Open") {
+                Button(AppL10n.string("common.open")) {
                     showWeeklyReport = true
                 }
                 .font(.system(size: 13, weight: .bold))
@@ -284,9 +285,9 @@ struct StatsView: View {
                 .lineSpacing(3)
 
             HStack(spacing: 10) {
-                compactMetric(title: "Goal Days", value: "\(weeklyReport.completedGoalDays)/7")
-                compactMetric(title: "Total Hours", value: totalWeeklyReportHoursText)
-                compactMetric(title: "Focus", value: weeklyFocusShortLabel)
+                compactMetric(title: AppL10n.string("Goal Days"), value: "\(weeklyReport.completedGoalDays)/7")
+                compactMetric(title: AppL10n.string("Total Hours"), value: totalWeeklyReportHoursText)
+                compactMetric(title: AppL10n.string("stats.weekly_report.focus"), value: weeklyFocusShortLabel)
             }
         }
         .padding(16)
@@ -301,7 +302,7 @@ struct StatsView: View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Weight Log")
+                    Text(AppL10n.string("Weight Log"))
                         .font(.system(size: 14, weight: .medium))
                         .foregroundStyle(.gray)
                     Text(weightHeadlineText)
@@ -309,11 +310,17 @@ struct StatsView: View {
                         .foregroundStyle(.white)
                 }
                 Spacer()
-                Button(weightStore.entries.isEmpty ? "Add First" : "Add Entry") {
+                Button {
                     showWeightEntrySheet = true
+                } label: {
+                    Text(weightStore.entries.isEmpty ? AppL10n.string("weight.add_first") : AppL10n.string("weight.add_entry"))
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundStyle(primary)
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 6)
+                        .contentShape(Rectangle())
                 }
-                .font(.system(size: 13, weight: .bold))
-                .foregroundStyle(primary)
+                .buttonStyle(.plain)
             }
 
             Text(weightSummaryText)
@@ -323,16 +330,20 @@ struct StatsView: View {
 
             if weightStore.entries.isEmpty {
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("先从第一条体重开始，后面我们会把体重趋势和断食节奏放在同一张卡里一起看。")
+                        Text(AppL10n.string("weight.empty.tip"))
                         .font(.system(size: 13))
                         .foregroundStyle(.gray)
-                    Button("Log Weight") {
+                    Button {
                         showWeightEntrySheet = true
+                    } label: {
+                        Text(AppL10n.string("Log Weight"))
+                            .font(.system(size: 15, weight: .bold))
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                            .contentShape(Rectangle())
                     }
-                    .font(.system(size: 15, weight: .bold))
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
+                    .buttonStyle(.plain)
                     .background(primary, in: RoundedRectangle(cornerRadius: 12))
                 }
                 .padding(14)
@@ -381,16 +392,16 @@ struct StatsView: View {
                 }
 
                 HStack(spacing: 10) {
-                    compactMetric(title: "Entries", value: "\(weightStore.entries.count)")
-                    compactMetric(title: "Window", value: "\(weightSummary.loggingWindowDays)d")
-                    compactMetric(title: "Fasting Avg", value: averageWindowFastingText)
+                    compactMetric(title: AppL10n.string("weight.entries"), value: "\(weightStore.entries.count)")
+                    compactMetric(title: AppL10n.string("weight.window"), value: "\(weightSummary.loggingWindowDays)d")
+                    compactMetric(title: AppL10n.string("weight.fasting_avg"), value: averageWindowFastingText)
                 }
 
                 Button {
                     showWeightRecordsSheet = true
                 } label: {
                     HStack {
-                        Text("Manage weight records")
+                        Text(AppL10n.string("Manage weight records"))
                             .font(.system(size: 14, weight: .bold))
                         Spacer()
                         Image(systemName: "chevron.right")
@@ -402,7 +413,7 @@ struct StatsView: View {
                     .background(primary.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
                 }
 
-                Text("这里展示的是同期观察，不代表体重变化完全由断食造成。")
+                Text(AppL10n.string("weight.disclaimer"))
                     .font(.system(size: 12))
                     .foregroundStyle(.gray)
             }
@@ -415,7 +426,7 @@ struct StatsView: View {
         )
     }
 
-    private func compactMetric(title: LocalizedStringKey, value: String, valueColor: Color = .white) -> some View {
+    private func compactMetric(title: String, value: String, valueColor: Color = .white) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title)
                 .font(.system(size: 10, weight: .semibold))
@@ -439,7 +450,7 @@ struct StatsView: View {
     private var proLockedCard: some View {
         ZStack {
             VStack(alignment: .leading, spacing: 12) {
-                Text("Advanced Pro Tools")
+                Text(AppL10n.string("Advanced Pro Tools"))
                     .font(.system(size: 14, weight: .medium))
                     .foregroundStyle(.gray)
                 RoundedRectangle(cornerRadius: 10)
@@ -456,15 +467,15 @@ struct StatsView: View {
                     .foregroundStyle(primary)
                     .padding(12)
                     .background(primary.opacity(0.2), in: Circle())
-                Text("More Pro Features Ahead")
+                Text(AppL10n.string("More Pro Features Ahead"))
                     .font(.system(size: 20, weight: .bold))
                     .foregroundStyle(.white)
-                Text("高级历史筛选、去广告和更深层洞察会继续进入 Pro。")
+                Text(AppL10n.string("pro.locked.body"))
                     .font(.system(size: 13))
                     .foregroundStyle(.gray)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: 240)
-                Button("See Pro") {
+                Button(AppL10n.string("pro.locked.cta")) {
                     showPaywall = true
                 }
                 .font(.system(size: 16, weight: .bold))

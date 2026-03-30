@@ -1,0 +1,16 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/download/",
+      "destination": "/download",
+      "permanent": true
+    },
+    {
+      "source": "/support/",
+      "destination": "/support",
+      "permanent": true
+    }
+  ]
+}

@@ -2,11 +2,9 @@ import SwiftUI
 
 struct OnboardingView: View {
     @EnvironmentObject private var viewModel: FastFlowTimerViewModel
+    @EnvironmentObject private var syncedPreferencesStore: SyncedPreferencesStore
     @AppStorage(FastFlowDefaultsKey.onboardingCompleted) private var onboardingCompleted = false
-    @AppStorage(FastFlowDefaultsKey.startReminderEnabled) private var startReminderEnabled = false
     @AppStorage(FastFlowDefaultsKey.notificationPermissionRequested) private var notificationPermissionRequested = false
-    @AppStorage(FastFlowDefaultsKey.startReminderHour) private var startReminderHour = 20
-    @AppStorage(FastFlowDefaultsKey.startReminderMinute) private var startReminderMinute = 0
 
     @State private var currentPage = 0
     @State private var selectedPlanType = PlanOption.plan16_8.type
@@ -234,11 +232,11 @@ struct OnboardingView: View {
         default:
             NotificationManager.shared.requestAuthorization { granted in
                 notificationPermissionRequested = true
-                startReminderEnabled = granted
+                syncedPreferencesStore.setStartReminderEnabled(granted)
                 if granted {
                     NotificationManager.shared.scheduleStartReminder(
-                        hour: startReminderHour,
-                        minute: startReminderMinute
+                        hour: syncedPreferencesStore.startReminderHour,
+                        minute: syncedPreferencesStore.startReminderMinute
                     )
                 }
                 onboardingCompleted = true
@@ -253,10 +251,10 @@ struct OnboardingView: View {
     private func syncPlanSelectionFromCurrent() {
         if PlanOption.isCustom(type: viewModel.targetPlanType) {
             selectedPlanType = PlanOption.customType
-            customFastingHours = PlanOption.customFastingHours(for: viewModel.targetDurationSec) ?? 17
+            customFastingHours = PlanOption.customFastingHours(for: viewModel.targetDurationSec) ?? PlanOption.normalizedCustomFastingHours(for: viewModel.targetDurationSec)
         } else {
             selectedPlanType = PlanOption.option(for: viewModel.targetPlanType)?.type ?? PlanOption.plan16_8.type
-            customFastingHours = PlanOption.customFastingHours(for: viewModel.targetDurationSec) ?? 17
+            customFastingHours = PlanOption.customFastingHours(for: viewModel.targetDurationSec) ?? PlanOption.normalizedCustomFastingHours(for: viewModel.targetDurationSec)
         }
     }
 

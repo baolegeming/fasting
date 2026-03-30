@@ -39,7 +39,7 @@ struct HistoryView: View {
                     .padding(.bottom, 24)
                 }
             }
-            .navigationTitle("History")
+            .navigationTitle(AppL10n.string("history.title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItemGroup(placement: .topBarTrailing) {
@@ -148,7 +148,7 @@ struct HistoryView: View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Today's Fasting")
+                    Text(AppL10n.string("history.today.title"))
                         .font(.system(size: 13))
                         .foregroundStyle(.gray)
                     Text(todayPlanName)
@@ -166,8 +166,8 @@ struct HistoryView: View {
 
             if hasOngoingSession {
                 HStack(spacing: 12) {
-                    metricTile(title: "Elapsed", value: formattedElapsedForHistory, emphasize: false)
-                    metricTile(title: "Remaining", value: formattedRemainingForHistory, emphasize: true)
+                    metricTile(title: AppL10n.string("history.today.elapsed"), value: formattedElapsedForHistory, emphasize: false)
+                    metricTile(title: AppL10n.string("history.today.remaining"), value: formattedRemainingForHistory, emphasize: true)
                 }
             } else {
                 Text(todayStatusDescription)
@@ -183,7 +183,7 @@ struct HistoryView: View {
         )
     }
 
-    private func metricTile(title: LocalizedStringKey, value: String, emphasize: Bool) -> some View {
+    private func metricTile(title: String, value: String, emphasize: Bool) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title)
                 .font(.system(size: 10, weight: .medium))
@@ -208,7 +208,7 @@ struct HistoryView: View {
                 HStack(spacing: 8) {
                     Image(systemName: "clock.arrow.circlepath")
                         .foregroundStyle(primary)
-                    Text("All Records")
+                    Text(AppL10n.string("history.records.title"))
                         .font(.system(size: 17, weight: .bold))
                         .foregroundStyle(.white)
                 }
@@ -225,12 +225,12 @@ struct HistoryView: View {
             if displayedRecords.isEmpty {
                 VStack(alignment: .leading, spacing: 12) {
                     if allRecords.isEmpty {
-                        Text("还没有断食记录。你可以开始一次新的计时，也可以先补录之前完成过的 session。")
+                        Text(AppL10n.string("history.empty.no_records"))
                             .font(.system(size: 14))
                             .foregroundStyle(.gray)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
-                        Button("补录断食记录") {
+                        Button(AppL10n.string("history.add_record")) {
                             showAddRecordSheet = true
                         }
                         .font(.system(size: 15, weight: .bold))
@@ -239,12 +239,12 @@ struct HistoryView: View {
                         .padding(.vertical, 12)
                         .background(primary, in: RoundedRectangle(cornerRadius: 12))
                     } else {
-                        Text("当前筛选条件下没有匹配的记录。你可以调整筛选条件，或清除后查看全部历史。")
+                        Text(AppL10n.string("history.empty.no_filtered_records"))
                             .font(.system(size: 14))
                             .foregroundStyle(.gray)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
-                        Button("清除筛选") {
+                        Button(AppL10n.string("history.clear_filters")) {
                             historyFilter = HistoryAdvancedFilter()
                         }
                         .font(.system(size: 15, weight: .bold))
@@ -282,10 +282,10 @@ struct HistoryView: View {
 
                             if isEditable(record) {
                                 Menu {
-                                    Button("Edit") {
+                                    Button(AppL10n.string("common.edit")) {
                                         editingRecord = record
                                     }
-                                    Button("Delete", role: .destructive) {
+                                    Button(AppL10n.string("Delete"), role: .destructive) {
                                         deletingRecord = record
                                     }
                                 } label: {
@@ -318,7 +318,7 @@ struct HistoryView: View {
                 .font(.system(size: 12))
                 .foregroundStyle(.gray)
             if !effectiveIsPro {
-                Button("升级") {
+                Button(AppL10n.string("Upgrade")) {
                     showPaywall = true
                 }
                 .font(.system(size: 12, weight: .bold))
@@ -327,24 +327,24 @@ struct HistoryView: View {
         }
         .padding(.vertical, 6)
         .alert(
-            "删除这条断食记录？",
+            AppL10n.string("history.delete_record.title"),
             isPresented: Binding(
                 get: { deletingRecord != nil },
                 set: { if !$0 { deletingRecord = nil } }
             ),
             actions: {
-                Button("删除", role: .destructive) {
+                Button(AppL10n.string("Delete"), role: .destructive) {
                     if let deletingRecord {
                         deleteRecord(deletingRecord)
                     }
                     deletingRecord = nil
                 }
-                Button("取消", role: .cancel) {
+                Button(AppL10n.string("Cancel"), role: .cancel) {
                     deletingRecord = nil
                 }
             },
             message: {
-                Text("删除后，相关统计和周报会按剩余记录立即重算。")
+                Text(AppL10n.string("history.delete_record.message"))
             }
         )
     }
@@ -400,13 +400,13 @@ struct HistoryView: View {
             }
 
             HStack(spacing: 10) {
-                Button("Edit Filters") {
+                Button(AppL10n.string("history.filters.edit")) {
                     showFilterSheet = true
                 }
                 .font(.system(size: 13, weight: .bold))
                 .foregroundStyle(primary)
 
-                Button("Clear") {
+                Button(AppL10n.string("history.filters.clear")) {
                     historyFilter = HistoryAdvancedFilter()
                 }
                 .font(.system(size: 13, weight: .bold))
@@ -604,15 +604,15 @@ struct HistoryView: View {
 
     private func statusBadgeText(for record: FastingRecord) -> String {
         if FastingRecordStatus.isCompleted(record.status) {
-            return AppL10n.string("Completed")
+            return AppL10n.string("session.result.completed")
         }
         if FastingRecordStatus.isNotCompleted(record.status) {
-            return AppL10n.string("Not Completed")
+            return AppL10n.string("session.result.not_completed")
         }
         if FastingRecordStatus.isOngoing(record.status) {
-            return AppL10n.string("Ongoing")
+            return AppL10n.string("history.filter.status.ongoing")
         }
-        return AppL10n.string("Ongoing")
+        return AppL10n.string("session.result.not_completed")
     }
 
     private func statusBadgeColor(for record: FastingRecord) -> Color {

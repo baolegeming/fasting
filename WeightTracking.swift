@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import SwiftData
 
 enum WeightRecordSource: String, Codable {
     case manual
@@ -55,10 +56,20 @@ final class WeightStore: ObservableObject {
     private let defaults: UserDefaults
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
+    private let modelContext: ModelContext?
 
-    init(defaults: UserDefaults = .standard) {
+    init(
+        modelContext: ModelContext? = nil,
+        defaults: UserDefaults = .standard
+    ) {
+        self.modelContext = modelContext
         self.defaults = defaults
-        load()
+        if modelContext != nil {
+            importLegacyEntriesIfNeeded()
+            refreshFromStore()
+        } else {
+            loadLegacyEntries()
+        }
     }
 
     func addEntry(
@@ -67,15 +78,25 @@ final class WeightStore: ObservableObject {
         source: WeightRecordSource = .manual
     ) {
         let normalizedWeight = (weightKg * 10).rounded() / 10
-        let entry = WeightEntry(
-            recordedAt: recordedAt,
-            weightKg: normalizedWeight,
-            source: source
-        )
-
-        entries.append(entry)
-        entries.sort { $0.recordedAt < $1.recordedAt }
-        persist()
+        if let modelContext {
+            let record = WeightRecord(
+                recordedAt: recordedAt,
+                weightKg: normalizedWeight,
+                sourceRaw: source.rawValue
+            )
+            modelContext.insert(record)
+            saveChanges()
+            refreshFromStore()
+        } else {
+            let entry = WeightEntry(
+                recordedAt: recordedAt,
+                weightKg: normalizedWeight,
+                source: source
+            )
+            entries.append(entry)
+            entries.sort { $0.recordedAt < $1.recordedAt }
+            persistLegacyEntries()
+        }
     }
 
     func updateEntry(
@@ -84,24 +105,38 @@ final class WeightStore: ObservableObject {
         recordedAt: Date,
         source: WeightRecordSource
     ) {
-        guard let index = entries.firstIndex(where: { $0.id == id }) else { return }
         let normalizedWeight = (weightKg * 10).rounded() / 10
-        entries[index] = WeightEntry(
-            id: id,
-            recordedAt: recordedAt,
-            weightKg: normalizedWeight,
-            source: source
-        )
-        entries.sort { $0.recordedAt < $1.recordedAt }
-        persist()
+        if let modelContext, let record = record(for: id, in: modelContext) {
+            record.recordedAt = recordedAt
+            record.weightKg = normalizedWeight
+            record.sourceRaw = source.rawValue
+            saveChanges()
+            refreshFromStore()
+        } else {
+            guard let index = entries.firstIndex(where: { $0.id == id }) else { return }
+            entries[index] = WeightEntry(
+                id: id,
+                recordedAt: recordedAt,
+                weightKg: normalizedWeight,
+                source: source
+            )
+            entries.sort { $0.recordedAt < $1.recordedAt }
+            persistLegacyEntries()
+        }
     }
 
     func deleteEntry(id: UUID) {
-        entries.removeAll { $0.id == id }
-        persist()
+        if let modelContext, let record = record(for: id, in: modelContext) {
+            modelContext.delete(record)
+            saveChanges()
+            refreshFromStore()
+        } else {
+            entries.removeAll { $0.id == id }
+            persistLegacyEntries()
+        }
     }
 
-    private func load() {
+    private func loadLegacyEntries() {
         guard let data = defaults.data(forKey: FastFlowDefaultsKey.weightEntries) else {
             entries = []
             return
@@ -115,9 +150,101 @@ final class WeightStore: ObservableObject {
         }
     }
 
-    private func persist() {
+    private func persistLegacyEntries() {
         guard let data = try? encoder.encode(entries) else { return }
         defaults.set(data, forKey: FastFlowDefaultsKey.weightEntries)
+    }
+
+    func refreshFromStore() {
+        guard let modelContext else {
+            entries = []
+            return
+        }
+
+        let descriptor = FetchDescriptor<WeightRecord>(
+            sortBy: [SortDescriptor(\.recordedAt, order: .forward)]
+        )
+
+        do {
+            let records = try modelContext.fetch(descriptor)
+            entries = records.map {
+                WeightEntry(
+                    id: $0.id,
+                    recordedAt: $0.recordedAt,
+                    weightKg: $0.weightKg,
+                    source: WeightRecordSource(rawValue: $0.sourceRaw) ?? .manual
+                )
+            }
+        } catch {
+            entries = []
+        }
+    }
+
+    private func importLegacyEntriesIfNeeded() {
+        guard let modelContext else { return }
+
+        let alreadyMigrated = defaults.bool(forKey: FastFlowDefaultsKey.weightEntriesMigratedToSwiftData)
+        guard !alreadyMigrated else { return }
+
+        let legacyEntries = decodeLegacyEntries()
+        guard !legacyEntries.isEmpty else {
+            defaults.set(true, forKey: FastFlowDefaultsKey.weightEntriesMigratedToSwiftData)
+            return
+        }
+
+        do {
+            let existingRecords = try modelContext.fetch(FetchDescriptor<WeightRecord>())
+            let existingIDs = Set(existingRecords.map(\.id))
+
+            for entry in legacyEntries where !existingIDs.contains(entry.id) {
+                let record = WeightRecord(
+                    id: entry.id,
+                    recordedAt: entry.recordedAt,
+                    weightKg: entry.weightKg,
+                    sourceRaw: entry.source.rawValue
+                )
+                modelContext.insert(record)
+            }
+
+            if modelContext.hasChanges {
+                try modelContext.save()
+            }
+
+            defaults.set(true, forKey: FastFlowDefaultsKey.weightEntriesMigratedToSwiftData)
+        } catch {
+            return
+        }
+    }
+
+    private func decodeLegacyEntries() -> [WeightEntry] {
+        guard let data = defaults.data(forKey: FastFlowDefaultsKey.weightEntries) else {
+            return []
+        }
+
+        do {
+            return try decoder.decode([WeightEntry].self, from: data)
+                .sorted { $0.recordedAt < $1.recordedAt }
+        } catch {
+            return []
+        }
+    }
+
+    private func record(for id: UUID, in modelContext: ModelContext) -> WeightRecord? {
+        let descriptor = FetchDescriptor<WeightRecord>(
+            predicate: #Predicate { $0.id == id }
+        )
+        return try? modelContext.fetch(descriptor).first
+    }
+
+    private func saveChanges() {
+        guard let modelContext else { return }
+        do {
+            if modelContext.hasChanges {
+                try modelContext.save()
+            }
+        } catch {
+            return
+        }
     }
 }
 

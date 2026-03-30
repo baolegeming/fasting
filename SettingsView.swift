@@ -2,15 +2,12 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject private var viewModel: FastFlowTimerViewModel
+    @EnvironmentObject private var syncedPreferencesStore: SyncedPreferencesStore
     @EnvironmentObject private var monetizationRuntime: MonetizationRuntime
     @EnvironmentObject private var subscriptionRuntime: SubscriptionRuntime
     @EnvironmentObject private var languageStore: AppLanguageStore
+    @EnvironmentObject private var cloudSyncRuntime: CloudSyncRuntime
 
-    @AppStorage(FastFlowDefaultsKey.startReminderEnabled) private var startReminderEnabled = false
-    @AppStorage(FastFlowDefaultsKey.phasePushEnabled) private var phasePushEnabled = true
-    @AppStorage(FastFlowDefaultsKey.oneHourPushEnabled) private var oneHourPushEnabled = true
-    @AppStorage(FastFlowDefaultsKey.startReminderHour) private var startReminderHour = 20
-    @AppStorage(FastFlowDefaultsKey.startReminderMinute) private var startReminderMinute = 0
     @AppStorage(FastFlowDefaultsKey.isPro) private var isPro = false
     @AppStorage(FastFlowDefaultsKey.adInventoryMode) private var adInventoryModeRaw = AdInventoryMode.buildFallbackDefault.rawValue
     @AppStorage(FastFlowDefaultsKey.notificationPermissionRequested) private var notificationPermissionRequested = false
@@ -33,7 +30,7 @@ struct SettingsView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    sectionLabel("Plan")
+                    sectionLabel(AppL10n.string("settings.section.plan"))
                     settingsCard {
                         planRow
                         divider
@@ -42,14 +39,14 @@ struct SettingsView: View {
                         reminderTimeRow
                     }
 
-                    sectionLabel("Notifications")
+                    sectionLabel(AppL10n.string("settings.section.notifications"))
                     settingsCard {
-                        toggleRow(icon: "chart.line.uptrend.xyaxis", title: "Phase Milestone Alerts", isOn: $phasePushEnabled)
+                        toggleRow(icon: "chart.line.uptrend.xyaxis", title: AppL10n.string("settings.notifications.phase_alerts"), isOn: phasePushBinding)
                         divider
-                        toggleRow(icon: "hourglass.bottomhalf.filled", title: "1 Hour Remaining", isOn: $oneHourPushEnabled)
+                        toggleRow(icon: "hourglass.bottomhalf.filled", title: AppL10n.string("settings.notifications.one_hour_remaining"), isOn: oneHourPushBinding)
                     }
 
-                    sectionLabel("Subscription")
+                    sectionLabel(AppL10n.string("settings.section.subscription"))
                     settingsCard {
                         subscriptionStatusRow
                         divider
@@ -57,13 +54,13 @@ struct SettingsView: View {
                     }
 
                     #if DEBUG
-                    sectionLabel("Developer")
+                    sectionLabel(AppL10n.string("settings.section.developer"))
                     settingsCard {
                         adModeRow
                     }
                     #endif
 
-                    sectionLabel("Data Management")
+                    sectionLabel(AppL10n.string("settings.section.data_management"))
                     settingsCard {
                         backupRow
                         divider
@@ -71,18 +68,18 @@ struct SettingsView: View {
                     }
 
                     if monetizationRuntime.isPrivacyOptionsRequired {
-                        sectionLabel("Privacy")
+                        sectionLabel(AppL10n.string("settings.section.privacy"))
                         settingsCard {
                             privacyChoicesRow
                         }
                     }
 
-                    sectionLabel("Language")
+                    sectionLabel(AppL10n.string("settings.section.language"))
                     settingsCard {
                         languageRow
                     }
 
-                    sectionLabel("About")
+                    sectionLabel(AppL10n.string("settings.section.about"))
                     settingsCard {
                         versionRow
                     }
@@ -91,7 +88,7 @@ struct SettingsView: View {
                 .padding(.bottom, 24)
             }
             .background(backgroundDark.ignoresSafeArea())
-            .navigationTitle("Settings")
+            .navigationTitle(AppL10n.string("settings.title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .sheet(isPresented: $showPaywall) {
@@ -133,7 +130,7 @@ struct SettingsView: View {
             .sheet(isPresented: $showCustomPlanSheet) {
                 CustomPlanSheetView(
                     fastingHours: $customFastingHours,
-                    title: "自定义计划",
+                    title: AppL10n.string("custom_plan.title"),
                     onSave: {
                         viewModel.updatePlan(
                             planType: PlanOption.customType,
@@ -150,17 +147,8 @@ struct SettingsView: View {
                 syncReminderTime()
                 syncCustomPlanState()
             }
-            .onChange(of: startReminderEnabled) { _, newValue in
-                handleStartReminderChange(newValue)
-            }
-            .onChange(of: phasePushEnabled) { _, _ in
-                viewModel.refreshScheduledNotifications()
-            }
-            .onChange(of: oneHourPushEnabled) { _, _ in
-                viewModel.refreshScheduledNotifications()
-            }
-            .alert("提示", isPresented: $showAlert) {
-                Button("确定", role: .cancel) {}
+            .alert(AppL10n.string("settings.alert.notice"), isPresented: $showAlert) {
+                Button(AppL10n.string("settings.alert.ok"), role: .cancel) {}
             } message: {
                 Text(alertMessage)
             }
@@ -172,7 +160,7 @@ struct SettingsView: View {
             showPlanPicker = true
         } label: {
             HStack {
-                rowTitle(icon: "timer", title: "Current Plan")
+                rowTitle(icon: "timer", title: AppL10n.string("settings.current_plan"))
                 Spacer()
                 HStack(spacing: 4) {
                     Text(currentPlanName)
@@ -193,14 +181,14 @@ struct SettingsView: View {
     private var startReminderRow: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                rowTitle(icon: "bell", title: "Start Reminder")
-                Text(AppL10n.format("Daily at %02d:%02d", startReminderHour, startReminderMinute))
+                rowTitle(icon: "bell", title: AppL10n.string("settings.start_reminder"))
+                Text(AppL10n.format("settings.start_reminder.detail", syncedPreferencesStore.startReminderHour, syncedPreferencesStore.startReminderMinute))
                     .font(.system(size: 12))
                     .foregroundStyle(.gray)
                     .padding(.leading, 30)
             }
             Spacer()
-            Toggle("", isOn: $startReminderEnabled)
+            Toggle("", isOn: startReminderBinding)
                 .tint(primary)
         }
         .padding(.vertical, 14)
@@ -213,10 +201,10 @@ struct SettingsView: View {
             showReminderTimePicker = true
         } label: {
             HStack {
-                rowTitle(icon: "clock", title: "Reminder Time")
+                rowTitle(icon: "clock", title: AppL10n.string("settings.reminder_time"))
                 Spacer()
                 HStack(spacing: 4) {
-                    Text(String(format: "%02d:%02d", startReminderHour, startReminderMinute))
+                    Text(String(format: "%02d:%02d", syncedPreferencesStore.startReminderHour, syncedPreferencesStore.startReminderMinute))
                         .font(.system(size: 15))
                         .foregroundStyle(.gray)
                     Image(systemName: "chevron.right")
@@ -231,7 +219,7 @@ struct SettingsView: View {
         .padding(.horizontal, 14)
     }
 
-    private func toggleRow(icon: String, title: LocalizedStringKey, isOn: Binding<Bool>) -> some View {
+    private func toggleRow(icon: String, title: String, isOn: Binding<Bool>) -> some View {
         HStack {
             rowTitle(icon: icon, title: title)
             Spacer()
@@ -244,17 +232,17 @@ struct SettingsView: View {
 
     private var subscriptionStatusRow: some View {
         HStack {
-            rowTitle(icon: "star.fill", title: "Subscription Status")
+            rowTitle(icon: "star.fill", title: AppL10n.string("settings.subscription_status"))
             Spacer()
             if isPro {
-                Text("Pro · Active")
+                Text(AppL10n.string("settings.subscription_status.active"))
                     .font(.system(size: 12, weight: .bold))
                     .foregroundStyle(.green)
                     .padding(.horizontal, 9)
                     .padding(.vertical, 5)
                     .background(Color.green.opacity(0.15), in: Capsule())
             } else {
-                Button("升级 Pro →") {
+                Button(AppL10n.string("settings.subscription_status.upgrade")) {
                     showPaywall = true
                 }
                 .font(.system(size: 14, weight: .bold))
@@ -270,7 +258,7 @@ struct SettingsView: View {
             restorePurchase()
         } label: {
             HStack {
-                rowTitle(icon: "arrow.triangle.2.circlepath", title: "Restore Purchase")
+                rowTitle(icon: "arrow.triangle.2.circlepath", title: AppL10n.string("settings.restore_purchases"))
                 Spacer()
                 Image(systemName: "chevron.right")
                     .font(.system(size: 12, weight: .semibold))
@@ -290,7 +278,7 @@ struct SettingsView: View {
             }
         } label: {
             HStack {
-                rowTitle(icon: "hand.raised", title: "Privacy Choices")
+                rowTitle(icon: "hand.raised", title: AppL10n.string("settings.privacy_choices"))
                 Spacer()
                 Image(systemName: "chevron.right")
                     .font(.system(size: 12, weight: .semibold))
@@ -305,8 +293,10 @@ struct SettingsView: View {
 
     private var backupRow: some View {
         VStack(alignment: .leading, spacing: 4) {
-            rowTitle(icon: "icloud", title: "iCloud Backup")
-            Text("即将支持，当前版本暂未接入云备份。")
+            rowTitle(icon: "icloud", title: AppL10n.string("settings.icloud_sync"))
+            Text(cloudSyncRuntime.isCloudSyncEnabled
+                 ? AppL10n.string("icloud.sync.enabled.detail")
+                 : AppL10n.string("icloud.sync.local_only.detail"))
                 .font(.system(size: 12))
                 .foregroundStyle(.gray)
                 .padding(.leading, 30)
@@ -317,11 +307,19 @@ struct SettingsView: View {
 
     private var backupNowRow: some View {
         Button {
-            alertMessage = AppL10n.string("iCloud 备份功能还在开发中，当前版本暂不支持手动备份。")
+            alertMessage = cloudSyncRuntime.isCloudSyncEnabled
+                ? AppL10n.string("icloud.sync.enabled.alert")
+                : AppL10n.format(
+                    "icloud.sync.local_only.alert",
+                    cloudSyncRuntime.lastErrorDescription ?? AppL10n.string("icloud.sync.local_only.reason.unknown")
+                )
             showAlert = true
         } label: {
             HStack {
-                rowTitle(icon: "icloud.and.arrow.up", title: "Backup Now")
+                rowTitle(
+                    icon: cloudSyncRuntime.isCloudSyncEnabled ? "arrow.triangle.2.circlepath.icloud" : "exclamationmark.icloud",
+                    title: AppL10n.string("settings.sync_status")
+                )
                 Spacer()
             }
             .contentShape(Rectangle())
@@ -336,7 +334,7 @@ struct SettingsView: View {
             showLanguagePicker = true
         } label: {
             HStack {
-                rowTitle(icon: "globe", title: "App Language")
+                rowTitle(icon: "globe", title: AppL10n.string("settings.app_language"))
                 Spacer()
                 HStack(spacing: 4) {
                     Text(languageStore.language.displayName)
@@ -356,7 +354,7 @@ struct SettingsView: View {
 
     private var versionRow: some View {
         HStack {
-            rowTitle(icon: "info.circle", title: "Version")
+            rowTitle(icon: "info.circle", title: AppL10n.string("settings.version"))
             Spacer()
             Text(versionText)
                 .font(.system(size: 14))
@@ -366,7 +364,7 @@ struct SettingsView: View {
         .padding(.horizontal, 14)
     }
 
-    private func rowTitle(icon: String, title: LocalizedStringKey) -> some View {
+    private func rowTitle(icon: String, title: String) -> some View {
         HStack(spacing: 8) {
             Image(systemName: icon)
                 .foregroundStyle(primary)
@@ -380,16 +378,16 @@ struct SettingsView: View {
     #if DEBUG
     private var adModeRow: some View {
         VStack(alignment: .leading, spacing: 12) {
-            rowTitle(icon: "megaphone", title: "Ad Inventory Mode")
+            rowTitle(icon: "megaphone", title: AppL10n.string("settings.ad_inventory_mode"))
 
-            Picker("Ad Inventory Mode", selection: $adInventoryModeRaw) {
+            Picker(AppL10n.string("settings.ad_inventory_mode"), selection: $adInventoryModeRaw) {
                 ForEach(AdInventoryMode.allCases) { mode in
                     Text(mode.title).tag(mode.rawValue)
                 }
             }
             .pickerStyle(.segmented)
 
-            Text("Debug builds default to Test Ads. Release builds follow bundle ad configuration and stay off until live inventory is fully configured.")
+            Text(AppL10n.string("settings.ad_inventory_mode.detail"))
                 .font(.system(size: 12))
                 .foregroundStyle(.gray)
                 .fixedSize(horizontal: false, vertical: true)
@@ -403,21 +401,22 @@ struct SettingsView: View {
         NavigationStack {
             VStack(spacing: 24) {
                 DatePicker(
-                    "提醒时间",
+                    AppL10n.string("settings.reminder_time"),
                     selection: $reminderTime,
                     displayedComponents: .hourAndMinute
                 )
                 .datePickerStyle(.wheel)
                 .labelsHidden()
 
-                Button("保存") {
+                Button(AppL10n.string("common.save")) {
                     let components = Calendar.current.dateComponents([.hour, .minute], from: reminderTime)
-                    startReminderHour = components.hour ?? 20
-                    startReminderMinute = components.minute ?? 0
-                    if startReminderEnabled {
+                    let hour = components.hour ?? 20
+                    let minute = components.minute ?? 0
+                    syncedPreferencesStore.setReminderTime(hour: hour, minute: minute)
+                    if syncedPreferencesStore.startReminderEnabled {
                         NotificationManager.shared.scheduleStartReminder(
-                            hour: startReminderHour,
-                            minute: startReminderMinute
+                            hour: hour,
+                            minute: minute
                         )
                     }
                     showReminderTimePicker = false
@@ -429,11 +428,11 @@ struct SettingsView: View {
                 .background(primary, in: RoundedRectangle(cornerRadius: 12))
             }
             .padding(24)
-            .navigationTitle("Reminder Time")
+            .navigationTitle(AppL10n.string("settings.reminder_time"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("取消") {
+                    Button(AppL10n.string("common.cancel")) {
                         showReminderTimePicker = false
                     }
                 }
@@ -455,7 +454,7 @@ struct SettingsView: View {
             .frame(height: 1)
     }
 
-    private func sectionLabel(_ text: LocalizedStringKey) -> some View {
+    private func sectionLabel(_ text: String) -> some View {
         Text(text)
             .font(.system(size: 11, weight: .bold))
             .foregroundStyle(.gray)
@@ -464,7 +463,13 @@ struct SettingsView: View {
     }
 
     private var currentPlanName: String {
-        PlanOption.displayName(
+        if PlanOption.isCustom(type: viewModel.targetPlanType) {
+            let ratioName = PlanOption.customRatioName(durationSec: viewModel.targetDurationSec)
+                ?? "\(PlanOption.normalizedCustomFastingHours(for: viewModel.targetDurationSec)):\(max(24 - PlanOption.normalizedCustomFastingHours(for: viewModel.targetDurationSec), 0))"
+            return AppL10n.format("plan.custom.current", ratioName)
+        }
+
+        return PlanOption.displayName(
             forType: viewModel.targetPlanType,
             durationSec: viewModel.targetDurationSec
         )
@@ -493,15 +498,15 @@ struct SettingsView: View {
         let calendar = Calendar.current
         let now = Date()
         reminderTime = calendar.date(
-            bySettingHour: startReminderHour,
-            minute: startReminderMinute,
+            bySettingHour: syncedPreferencesStore.startReminderHour,
+            minute: syncedPreferencesStore.startReminderMinute,
             second: 0,
             of: now
         ) ?? now
     }
 
     private func syncCustomPlanState() {
-        customFastingHours = PlanOption.customFastingHours(for: viewModel.targetDurationSec) ?? 17
+        customFastingHours = PlanOption.customFastingHours(for: viewModel.targetDurationSec) ?? PlanOption.normalizedCustomFastingHours(for: viewModel.targetDurationSec)
     }
 
     private func handleStartReminderChange(_ newValue: Bool) {
@@ -510,38 +515,68 @@ struct SettingsView: View {
                 switch status {
                 case .authorized, .provisional, .ephemeral:
                     notificationPermissionRequested = true
+                    syncedPreferencesStore.setStartReminderEnabled(true)
                     NotificationManager.shared.scheduleStartReminder(
-                        hour: startReminderHour,
-                        minute: startReminderMinute
+                        hour: syncedPreferencesStore.startReminderHour,
+                        minute: syncedPreferencesStore.startReminderMinute
                     )
                 case .notDetermined:
                     NotificationManager.shared.requestAuthorization { granted in
                         notificationPermissionRequested = true
                         if granted {
+                            syncedPreferencesStore.setStartReminderEnabled(true)
                             NotificationManager.shared.scheduleStartReminder(
-                                hour: startReminderHour,
-                                minute: startReminderMinute
+                                hour: syncedPreferencesStore.startReminderHour,
+                                minute: syncedPreferencesStore.startReminderMinute
                             )
                         } else {
-                            startReminderEnabled = false
+                            syncedPreferencesStore.setStartReminderEnabled(false)
                             alertMessage = AppL10n.string("通知权限未开启，请在系统设置中允许通知。")
                             showAlert = true
                         }
                     }
                 case .denied:
                     notificationPermissionRequested = true
-                    startReminderEnabled = false
+                    syncedPreferencesStore.setStartReminderEnabled(false)
                     alertMessage = AppL10n.string("通知权限未开启，请在系统设置中允许通知。")
                     showAlert = true
                 @unknown default:
-                    startReminderEnabled = false
+                    syncedPreferencesStore.setStartReminderEnabled(false)
                     alertMessage = AppL10n.string("暂时无法确认通知权限状态，请稍后重试。")
                     showAlert = true
                 }
             }
         } else {
+            syncedPreferencesStore.setStartReminderEnabled(false)
             NotificationManager.shared.cancelStartReminder()
         }
+    }
+
+    private var startReminderBinding: Binding<Bool> {
+        Binding(
+            get: { syncedPreferencesStore.startReminderEnabled },
+            set: { handleStartReminderChange($0) }
+        )
+    }
+
+    private var phasePushBinding: Binding<Bool> {
+        Binding(
+            get: { syncedPreferencesStore.phasePushEnabled },
+            set: { newValue in
+                syncedPreferencesStore.setPhasePushEnabled(newValue)
+                viewModel.refreshScheduledNotifications()
+            }
+        )
+    }
+
+    private var oneHourPushBinding: Binding<Bool> {
+        Binding(
+            get: { syncedPreferencesStore.oneHourPushEnabled },
+            set: { newValue in
+                syncedPreferencesStore.setOneHourPushEnabled(newValue)
+                viewModel.refreshScheduledNotifications()
+            }
+        )
     }
 }
 
@@ -556,14 +591,15 @@ private struct PlanSelectionSheetView: View {
     private let primary = Color(hex: "ec5b13")
     private let backgroundDark = Color(hex: "0F0F0F")
     private let cardDark = Color(hex: "1C1C1E")
+    private let secondaryText = Color.white.opacity(0.74)
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
-                    Text("Pick the fasting rhythm that feels most sustainable this week.")
-                        .font(.system(size: 13))
-                        .foregroundStyle(.gray)
+                    Text(AppL10n.string("settings.plan_picker.subtitle"))
+                        .font(.system(size: 14))
+                        .foregroundStyle(secondaryText)
 
                     ForEach(PlanOption.allCases, id: \.type) { option in
                         planRow(option)
@@ -574,11 +610,11 @@ private struct PlanSelectionSheetView: View {
                 .padding(20)
             }
             .background(backgroundDark.ignoresSafeArea())
-            .navigationTitle("当前计划")
+            .navigationTitle(AppL10n.string("settings.current_plan"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Close") {
+                    Button(AppL10n.string("common.close")) {
                         dismiss()
                     }
                     .foregroundStyle(.white.opacity(0.85))
@@ -609,7 +645,7 @@ private struct PlanSelectionSheetView: View {
                     }
                     Text(optionDescription(option))
                         .font(.system(size: 13))
-                        .foregroundStyle(.gray)
+                        .foregroundStyle(secondaryText)
                         .multilineTextAlignment(.leading)
                 }
                 Spacer()
@@ -633,7 +669,7 @@ private struct PlanSelectionSheetView: View {
             HStack(alignment: .top, spacing: 12) {
                 VStack(alignment: .leading, spacing: 6) {
                     HStack(spacing: 8) {
-                        Text("自定义计划")
+                        Text(AppL10n.string("settings.plan.custom_title"))
                             .font(.system(size: 20, weight: .bold))
                             .foregroundStyle(.white)
                         if isSelected {
@@ -643,7 +679,7 @@ private struct PlanSelectionSheetView: View {
                     }
                     Text(customPlanDescription)
                         .font(.system(size: 13))
-                        .foregroundStyle(.gray)
+                        .foregroundStyle(secondaryText)
                         .multilineTextAlignment(.leading)
                 }
                 Spacer()
@@ -664,22 +700,22 @@ private struct PlanSelectionSheetView: View {
     private func optionDescription(_ option: PlanOption) -> String {
         switch option {
         case .plan16_8:
-            return "适合大多数人，容易开始，也更容易长期坚持。"
+            return AppL10n.string("settings.plan.desc.16_8")
         case .plan18_6:
-            return "在稳定节奏上再进一小步，适合已经习惯 16:8 的用户。"
+            return AppL10n.string("settings.plan.desc.18_6")
         case .plan20_4:
-            return "进食窗口更短，适合已经有较稳定断食习惯的人。"
+            return AppL10n.string("settings.plan.desc.20_4")
         case .omad:
-            return "一天一餐，节奏更激进，建议在熟悉断食后再尝试。"
+            return AppL10n.string("settings.plan.desc.omad")
         }
     }
 
     private var customPlanDescription: String {
         if let customName = PlanOption.customRatioName(durationSec: selectedDurationSec),
            PlanOption.isCustom(type: selectedPlanType) {
-            return "当前为 \(customName)，适合按你的真实生活节奏来设定。"
+            return AppL10n.format("settings.plan.custom.current_desc", customName)
         }
-        return "按你自己的节奏设置 fasting 时长，更灵活也更贴合真实作息。"
+        return AppL10n.string("settings.plan.custom.default_desc")
     }
 }
 
@@ -696,7 +732,7 @@ private struct LanguageSelectionSheetView: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 14) {
-                Text("Choose the app language used across the main product experience.")
+                Text(AppL10n.string("settings.language_picker.subtitle"))
                     .font(.system(size: 13))
                     .foregroundStyle(.gray)
 
@@ -728,11 +764,11 @@ private struct LanguageSelectionSheetView: View {
             }
             .padding(20)
             .background(backgroundDark.ignoresSafeArea())
-            .navigationTitle("应用语言")
+            .navigationTitle(AppL10n.string("settings.app_language"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Close") {
+                    Button(AppL10n.string("common.close")) {
                         dismiss()
                     }
                     .foregroundStyle(.white.opacity(0.85))
