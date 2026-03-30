@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import CoreImage.CIFilterBuiltins
 
 struct DailyCompletionShareCardContent: Identifiable {
     let id = UUID()
@@ -78,7 +79,7 @@ struct DailyCompletionShareCardView: View {
     var body: some View {
         ShareCardCanvas {
             VStack(alignment: .leading, spacing: 18) {
-                ShareCardHeader(
+                ShareCardTopBar(
                     eyebrow: "THIS FAST",
                     rangeText: nil
                 )
@@ -134,7 +135,7 @@ struct WeeklyReportShareCardView: View {
     var body: some View {
         ShareCardCanvas {
             VStack(alignment: .leading, spacing: 18) {
-                ShareCardHeader(
+                ShareCardTopBar(
                     eyebrow: "WEEKLY RHYTHM",
                     rangeText: content.rangeText
                 )
@@ -382,6 +383,49 @@ private struct ShareCardHeader: View {
     }
 }
 
+private struct ShareCardTopBar: View {
+    let eyebrow: String
+    let rangeText: String?
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 16) {
+            ShareCardHeader(
+                eyebrow: eyebrow,
+                rangeText: rangeText
+            )
+
+            Spacer(minLength: 0)
+
+            ShareCardQRCodeBadge()
+        }
+    }
+}
+
+private struct ShareCardQRCodeBadge: View {
+    private let qrCodeImage = ShareCardQRCodeRenderer.image(for: ShareCardCopy.downloadURL)
+
+    var body: some View {
+        VStack(spacing: 6) {
+            if let qrCodeImage {
+                Image(uiImage: qrCodeImage)
+                    .interpolation(.none)
+                    .resizable()
+                    .frame(width: 64, height: 64)
+                    .padding(6)
+                    .background(
+                        RoundedRectangle(cornerRadius: 18)
+                            .fill(Color.white)
+                    )
+            }
+
+            Text(ShareCardCopy.downloadHint)
+                .font(.system(size: 10, weight: .bold))
+                .foregroundStyle(.white.opacity(0.72))
+                .tracking(0.3)
+        }
+    }
+}
+
 private struct ShareCardChipFlow: View {
     enum Layout {
         case wrapped
@@ -442,6 +486,8 @@ private struct ShareCardChipFlow: View {
 }
 
 private enum ShareCardCopy {
+    static let downloadURL = URL(string: "https://fasting-nu.vercel.app/download")!
+
     private static var language: AppLanguage {
         AppLanguage.resolved()
     }
@@ -612,6 +658,15 @@ private enum ShareCardCopy {
             return "\(headline). \(emotionalLine)"
         }
     }
+
+    static var downloadHint: String {
+        switch language {
+        case .zh:
+            return "扫码下载"
+        case .en:
+            return "SCAN TO GET"
+        }
+    }
 }
 
 private enum ShareCardFormatter {
@@ -679,6 +734,27 @@ func renderShareImage<Content: View>(
     )
     renderer.scale = 3
     return renderer.uiImage
+}
+
+private enum ShareCardQRCodeRenderer {
+    private static let context = CIContext()
+
+    static func image(for url: URL) -> UIImage? {
+        let filter = CIFilter.qrCodeGenerator()
+        filter.setValue(Data(url.absoluteString.utf8), forKey: "inputMessage")
+        filter.correctionLevel = "M"
+
+        guard let outputImage = filter.outputImage else {
+            return nil
+        }
+
+        let transformed = outputImage.transformed(by: CGAffineTransform(scaleX: 10, y: 10))
+        guard let cgImage = context.createCGImage(transformed, from: transformed.extent) else {
+            return nil
+        }
+
+        return UIImage(cgImage: cgImage)
+    }
 }
 
 #Preview("Weekly Share Card") {
