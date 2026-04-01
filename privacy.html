@@ -14,16 +14,17 @@
     <header class="topbar">
       <div class="shell topbar-inner">
         <a class="brand" href="/">
-          <img src="/fastflow_app_icon_master.png" alt="FastFlow 图标" />
+          <img src="/fastflow_app_icon_master.png" alt="FastFlow 图标" data-i18n-alt="brandIconAlt" />
           <div class="brand-copy">
             <strong>FASTFLOW</strong>
             <span>PRIVACY</span>
           </div>
         </a>
         <nav class="nav">
-          <a href="/">主页</a>
-          <a href="/download">下载</a>
-          <a href="/support">技术支持</a>
+          <a href="/" data-i18n="navHome">主页</a>
+          <a href="/download" data-i18n="navDownload">下载</a>
+          <a href="/support" data-i18n="navSupport">技术支持</a>
+          <button class="lang-toggle" type="button" data-lang-toggle>EN</button>
         </nav>
       </div>
     </header>
@@ -31,13 +32,13 @@
     <main class="shell privacy-layout">
       <section class="page-hero">
         <div class="eyebrow">PRIVACY POLICY</div>
-        <h1>隐私政策</h1>
-        <p>
+        <h1 data-i18n="pageTitle">隐私政策</h1>
+        <p data-i18n="pageDesc">
           FastFlow 重视你的隐私。本页说明我们会处理哪些信息、这些信息如何被使用，以及你可以通过哪些方式管理自己的数据与隐私选择。
         </p>
-        <p class="muted">最后更新：2026 年 4 月 1 日</p>
+        <p class="muted" data-i18n="updatedAt">最后更新：2026 年 4 月 1 日</p>
 
-        <div class="policy-stack">
+        <div class="policy-stack" data-lang-only="zh">
           <article class="panel card policy-card">
             <h2>1. 我们会处理哪些信息</h2>
             <ul>
@@ -114,43 +115,91 @@
             </p>
             <p><a href="mailto:baolegeming@gmail.com">baolegeming@gmail.com</a></p>
           </article>
+        </div>
+
+        <div class="policy-stack" data-lang-only="en">
+          <article class="panel card policy-card">
+            <h2>1. Data We Process</h2>
+            <ul>
+              <li>Data you create in the app, including fasting sessions, plan settings, feedback, weight logs, reminders, and language preference.</li>
+              <li>Subscription status and purchase validation data via Apple and RevenueCat for Pro access and restore purchase.</li>
+              <li>Ad-related delivery, diagnostics, and interaction signals from ad services in the free experience.</li>
+              <li>Support information you send to us, such as email content, screenshots, or issue details.</li>
+            </ul>
+          </article>
 
           <article class="panel card policy-card">
-            <h2>English Summary</h2>
-            <p>
-              FastFlow stores fasting records, goals, reminders, feedback, weight logs, and language preferences so the app can provide tracking, reports, and reminders.
-            </p>
-            <p>
-              We currently use Apple services for payment handling and optional iCloud sync, RevenueCat for subscription management, and Google AdMob / UMP for ads and privacy choices in the free version.
-            </p>
-            <p>
-              FastFlow does not currently request Apple's cross-app tracking permission. We do not sell your in-app personal data. If you have privacy questions, contact <a href="mailto:baolegeming@gmail.com">baolegeming@gmail.com</a>.
-            </p>
+            <h2>2. How We Use Data</h2>
+            <ul>
+              <li>To store and show your fasting history, reports, and share cards.</li>
+              <li>To send reminders for start time, phase milestones, and one-hour-left alerts when enabled.</li>
+              <li>To manage Pro purchases, restore purchases, and entitlement checks.</li>
+              <li>To operate ads in the free version and provide privacy options where required.</li>
+              <li>To improve reliability and respond to support requests.</li>
+            </ul>
+          </article>
+
+          <article class="panel card policy-card">
+            <h2>3. Storage and Sync</h2>
+            <ul>
+              <li>Most app data is stored on your device by default.</li>
+              <li>If available, FastFlow may use iCloud / CloudKit to sync supported records across your Apple devices.</li>
+              <li>Payment details are handled by Apple. We do not directly store full card or bank account numbers.</li>
+            </ul>
+          </article>
+
+          <article class="panel card policy-card">
+            <h2>4. Third-Party Services</h2>
+            <ul>
+              <li><strong>Google AdMob / UMP</strong> for ads and privacy consent flow.</li>
+              <li><strong>RevenueCat</strong> for subscription management.</li>
+              <li><strong>Apple CloudKit / iCloud</strong> for optional sync.</li>
+            </ul>
+            <div class="contact-list">
+              <a class="button" href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">Google Privacy</a>
+              <a class="button" href="https://www.revenuecat.com/privacy" target="_blank" rel="noreferrer">RevenueCat Privacy</a>
+              <a class="button" href="https://www.apple.com/legal/privacy/" target="_blank" rel="noreferrer">Apple Privacy</a>
+            </div>
+          </article>
+
+          <article class="panel card policy-card">
+            <h2>5. Tracking and Choices</h2>
+            <ul>
+              <li>FastFlow does not actively request Apple’s cross-app tracking permission in the current build.</li>
+              <li>FastFlow does not sell your in-app personal data.</li>
+              <li>You can manage permissions for notifications, iCloud, and ad/privacy settings in iOS.</li>
+            </ul>
+          </article>
+
+          <article class="panel card policy-card">
+            <h2>6. Contact</h2>
+            <p>If you have privacy questions, contact us at:</p>
+            <p><a href="mailto:baolegeming@gmail.com">baolegeming@gmail.com</a></p>
           </article>
         </div>
       </section>
 
       <aside class="panel privacy-panel">
-        <h3 style="margin-top: 0;">快速查看</h3>
+        <h3 style="margin-top: 0;" data-i18n="quickViewTitle">快速查看</h3>
         <div class="support-list">
-          <span class="chip">本地记录</span>
-          <span class="chip">iCloud 同步</span>
-          <span class="chip">Pro 订阅</span>
-          <span class="chip">广告隐私选项</span>
+          <span class="chip" data-i18n="quickChip1">本地记录</span>
+          <span class="chip" data-i18n="quickChip2">iCloud 同步</span>
+          <span class="chip" data-i18n="quickChip3">Pro 订阅</span>
+          <span class="chip" data-i18n="quickChip4">广告隐私选项</span>
         </div>
 
         <div class="policy-summary">
-          <strong>当前重点</strong>
-          <p>断食记录、体重、提醒偏好和语言设置主要用于提供 App 核心功能。</p>
+          <strong data-i18n="summary1Title">当前重点</strong>
+          <p data-i18n="summary1Desc">断食记录、体重、提醒偏好和语言设置主要用于提供 App 核心功能。</p>
         </div>
 
         <div class="policy-summary">
-          <strong>广告与订阅</strong>
-          <p>免费版本可能展示广告，Pro 订阅状态通过 RevenueCat 与 Apple 进行管理。</p>
+          <strong data-i18n="summary2Title">广告与订阅</strong>
+          <p data-i18n="summary2Desc">免费版本可能展示广告，Pro 订阅状态通过 RevenueCat 与 Apple 进行管理。</p>
         </div>
 
         <div class="policy-summary">
-          <strong>联系邮箱</strong>
+          <strong data-i18n="summary3Title">联系邮箱</strong>
           <p><a href="mailto:baolegeming@gmail.com">baolegeming@gmail.com</a></p>
         </div>
       </aside>
@@ -158,9 +207,68 @@
 
     <footer class="footer">
       <div class="shell footer-inner">
-        <span>FastFlow Privacy Policy</span>
+        <span data-i18n="footerTitle">FastFlow Privacy Policy</span>
         <span><a href="mailto:baolegeming@gmail.com">baolegeming@gmail.com</a></span>
       </div>
     </footer>
+    <script src="/website-i18n.js"></script>
+    <script>
+      FastFlowSiteI18n.init({
+        meta: {
+          zh: {
+            title: "FastFlow 隐私政策",
+            description: "FastFlow 隐私政策，说明断食记录、订阅、广告、通知与 iCloud 同步相关的数据处理方式。"
+          },
+          en: {
+            title: "FastFlow Privacy Policy",
+            description: "FastFlow privacy policy covering fasting data, subscriptions, ads, notifications, and optional iCloud sync."
+          }
+        },
+        text: {
+          zh: {
+            navHome: "主页",
+            navDownload: "下载",
+            navSupport: "技术支持",
+            pageTitle: "隐私政策",
+            pageDesc: "FastFlow 重视你的隐私。本页说明我们会处理哪些信息、这些信息如何被使用，以及你可以通过哪些方式管理自己的数据与隐私选择。",
+            updatedAt: "最后更新：2026 年 4 月 1 日",
+            quickViewTitle: "快速查看",
+            quickChip1: "本地记录",
+            quickChip2: "iCloud 同步",
+            quickChip3: "Pro 订阅",
+            quickChip4: "广告隐私选项",
+            summary1Title: "当前重点",
+            summary1Desc: "断食记录、体重、提醒偏好和语言设置主要用于提供 App 核心功能。",
+            summary2Title: "广告与订阅",
+            summary2Desc: "免费版本可能展示广告，Pro 订阅状态通过 RevenueCat 与 Apple 进行管理。",
+            summary3Title: "联系邮箱",
+            footerTitle: "FastFlow Privacy Policy"
+          },
+          en: {
+            navHome: "Home",
+            navDownload: "Download",
+            navSupport: "Support",
+            pageTitle: "Privacy Policy",
+            pageDesc: "FastFlow respects your privacy. This page explains what data we process, how we use it, and how you can manage your privacy choices.",
+            updatedAt: "Last updated: April 1, 2026",
+            quickViewTitle: "Quick View",
+            quickChip1: "Local records",
+            quickChip2: "iCloud sync",
+            quickChip3: "Pro subscription",
+            quickChip4: "Ad privacy options",
+            summary1Title: "Core usage",
+            summary1Desc: "Fasting records, weight logs, reminders, and language settings are used to provide core app features.",
+            summary2Title: "Ads and subscription",
+            summary2Desc: "Ads may appear in the free tier. Pro subscription is managed by RevenueCat and Apple.",
+            summary3Title: "Contact",
+            footerTitle: "FastFlow Privacy Policy"
+          }
+        },
+        alt: {
+          zh: { brandIconAlt: "FastFlow 图标" },
+          en: { brandIconAlt: "FastFlow icon" }
+        }
+      });
+    </script>
   </body>
 </html>

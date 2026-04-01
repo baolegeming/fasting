@@ -9,6 +9,22 @@
   const ua = navigator.userAgent || "";
   const isIOS = /iPhone|iPad|iPod/i.test(ua);
   const isAndroid = /Android/i.test(ua);
+  const lang = document.documentElement.lang === "zh-CN" ? "zh" : "en";
+  const copy = {
+    zh: {
+      iosDetected: "检测到你正在使用 iPhone，准备跳转下载。",
+      androidDetected: "检测到你正在使用 Android，准备跳转下载。",
+      noAutoWithIos: "如果没有自动跳转，可以手动点击上面的 iPhone 下载。",
+      noAutoNoIos: "iPhone 下载入口即将开放，安卓版敬请期待。"
+    },
+    en: {
+      iosDetected: "iPhone detected. Preparing your download redirect.",
+      androidDetected: "Android detected. Preparing your download redirect.",
+      noAutoWithIos: "If auto redirect did not run, tap the iPhone download button above.",
+      noAutoNoIos: "iPhone download link is coming soon. Android is not available yet."
+    }
+  };
+  const t = copy[lang];
 
   const autoTarget = isIOS ? config.iosStoreUrl : isAndroid ? config.androidUrl : "";
 
@@ -44,8 +60,8 @@
   if (autoTarget) {
     if (status) {
       status.textContent = isIOS
-        ? "检测到你正在使用 iPhone，准备跳转下载。"
-        : "检测到你正在使用 Android，准备跳转下载。";
+        ? t.iosDetected
+        : t.androidDetected;
     }
     if (autoLink) {
       autoLink.href = autoTarget;
@@ -56,8 +72,8 @@
   } else {
     if (status) {
       status.textContent = config.iosStoreUrl
-        ? "如果没有自动跳转，可以手动点击上面的 iPhone 下载。"
-        : "iPhone 下载入口即将开放，安卓版敬请期待。";
+        ? t.noAutoWithIos
+        : t.noAutoNoIos;
     }
   }
 })();

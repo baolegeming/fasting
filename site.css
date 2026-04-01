@@ -121,6 +121,24 @@ img {
   transition: 180ms ease;
 }
 
+.lang-toggle {
+  min-height: 46px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: 180ms ease;
+}
+
+.lang-toggle:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.06);
+}
+
 .button-primary {
   border: none;
   background: linear-gradient(135deg, var(--accent), var(--accent-deep));

@@ -11,55 +11,107 @@
     <header class="topbar">
       <div class="shell topbar-inner">
         <a class="brand" href="/">
-          <img src="/fastflow_app_icon_master.png" alt="FastFlow 图标" />
+          <img src="/fastflow_app_icon_master.png" alt="FastFlow 图标" data-i18n-alt="brandIconAlt" />
           <div class="brand-copy">
             <strong>FASTFLOW</strong>
             <span>DOWNLOAD</span>
           </div>
         </a>
         <nav class="nav">
-          <a href="/">主页</a>
-          <a href="/privacy">隐私政策</a>
-          <a href="/support">技术支持</a>
+          <a href="/" data-i18n="navHome">主页</a>
+          <a href="/privacy" data-i18n="navPrivacy">隐私政策</a>
+          <a href="/support" data-i18n="navSupport">技术支持</a>
+          <button class="lang-toggle" type="button" data-lang-toggle>EN</button>
         </nav>
       </div>
     </header>
 
     <main class="shell download-layout">
       <section class="page-hero">
-        <div class="eyebrow">SMART REDIRECT</div>
-        <h1>下载 FastFlow</h1>
+        <div class="eyebrow" data-i18n="eyebrow">SMART REDIRECT</div>
+        <h1 data-i18n="title">下载 FastFlow</h1>
         <p data-download-status>
           这是 FastFlow 的统一下载入口，方便你随时获取最新下载方式。
         </p>
         <div class="download-actions">
-          <a class="button button-primary" data-auto-link href="/">打开下载入口</a>
-          <a class="button" data-ios-link href="/">iPhone 下载</a>
-          <a class="button" data-android-link href="/">安卓版敬请期待</a>
-          <a class="button" data-home-link href="/">回到主页</a>
+          <a class="button button-primary" data-auto-link href="/" data-i18n="ctaAuto">打开下载入口</a>
+          <a class="button" data-ios-link href="/" data-i18n="ctaIos">iPhone 下载</a>
+          <a class="button" data-android-link href="/" data-i18n="ctaAndroid">安卓版敬请期待</a>
+          <a class="button" data-home-link href="/" data-i18n="ctaHome">回到主页</a>
         </div>
-        <div class="download-note">
+        <div class="download-note" data-i18n="note">
           如果暂时还没有自动跳转，可以直接点击上面的按钮继续。
         </div>
       </section>
 
       <aside class="panel download-panel">
-        <h3 style="margin-top: 0;">联系我们</h3>
-        <p class="muted">邮箱：<a href="mailto:baolegeming@gmail.com">baolegeming@gmail.com</a></p>
-        <p class="muted">小红书：<a href="https://xhslink.com/m/8OonTY0smqn" target="_blank" rel="noreferrer">小助理麻酱酱</a></p>
+        <h3 style="margin-top: 0;" data-i18n="contactTitle">联系我们</h3>
+        <p class="muted"><span data-i18n="emailLabel">邮箱：</span><a href="mailto:baolegeming@gmail.com">baolegeming@gmail.com</a></p>
+        <p class="muted"><span data-i18n="xhsLabel">小红书：</span><a href="https://xhslink.com/m/8OonTY0smqn" target="_blank" rel="noreferrer" data-i18n="xhsName">小助理麻酱酱</a></p>
         <div style="margin-top: 18px;" class="panel qr-card">
-          <img src="/website-assets/xiaohongshu-qr.jpg" alt="小红书二维码" />
+          <img src="/website-assets/xiaohongshu-qr.jpg" alt="小红书二维码" data-i18n-alt="xhsQrAlt" />
         </div>
       </aside>
     </main>
 
     <footer class="footer">
       <div class="shell footer-inner">
-        <span>FastFlow Download Hub</span>
-        <span><a href="/privacy">隐私政策</a> · Contact: baolegeming@gmail.com</span>
+        <span data-i18n="footerTitle">FastFlow Download Hub</span>
+        <span><a href="/privacy" data-i18n="footerPrivacy">隐私政策</a> · Contact: baolegeming@gmail.com</span>
       </div>
     </footer>
 
+    <script src="/website-i18n.js"></script>
     <script src="/download.js"></script>
+    <script>
+      FastFlowSiteI18n.init({
+        meta: {
+          zh: { title: "FastFlow 下载", description: "FastFlow 下载中转页。" },
+          en: { title: "FastFlow Download", description: "FastFlow download hub." }
+        },
+        text: {
+          zh: {
+            navHome: "主页",
+            navPrivacy: "隐私政策",
+            navSupport: "技术支持",
+            eyebrow: "SMART REDIRECT",
+            title: "下载 FastFlow",
+            ctaAuto: "打开下载入口",
+            ctaIos: "iPhone 下载",
+            ctaAndroid: "安卓版敬请期待",
+            ctaHome: "回到主页",
+            note: "如果暂时还没有自动跳转，可以直接点击上面的按钮继续。",
+            contactTitle: "联系我们",
+            emailLabel: "邮箱：",
+            xhsLabel: "小红书：",
+            xhsName: "小助理麻酱酱",
+            footerTitle: "FastFlow Download Hub",
+            footerPrivacy: "隐私政策"
+          },
+          en: {
+            navHome: "Home",
+            navPrivacy: "Privacy",
+            navSupport: "Support",
+            eyebrow: "SMART REDIRECT",
+            title: "Download FastFlow",
+            ctaAuto: "Open Download Entry",
+            ctaIos: "Download for iPhone",
+            ctaAndroid: "Android Coming Soon",
+            ctaHome: "Back to Home",
+            note: "If auto redirect does not start, use the buttons above.",
+            contactTitle: "Contact",
+            emailLabel: "Email: ",
+            xhsLabel: "Xiaohongshu: ",
+            xhsName: "Assistant MaJiangJiang",
+            footerTitle: "FastFlow Download Hub",
+            footerPrivacy: "Privacy Policy"
+          }
+        },
+        alt: {
+          zh: { brandIconAlt: "FastFlow 图标", xhsQrAlt: "小红书二维码" },
+          en: { brandIconAlt: "FastFlow icon", xhsQrAlt: "Xiaohongshu QR code" }
+        }
+      });
+    </script>
   </body>
 </html>
