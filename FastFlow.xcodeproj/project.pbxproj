@@ -76,7 +76,7 @@
 		81162DFB2F5D6CA8F6795951 /* MonetizationRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonetizationRuntime.swift; sourceTree = "<group>"; };
 		8B65EC99B5790290915C31AE /* OngoingFastCorrectionSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OngoingFastCorrectionSheetView.swift; sourceTree = "<group>"; };
 		9169870153ADFDE97D98CCA3 /* FastFlowTimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastFlowTimerViewModel.swift; sourceTree = "<group>"; };
-		94A36CE54D35A42F91EF1E3B /* FastFlow.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FastFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		94A36CE54D35A42F91EF1E3B /* FastFlow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FastFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A99E99E5B5306A0A9E1D8D4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A403ED06A3E9E3EA0BDC28AC /* PlanOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanOption.swift; sourceTree = "<group>"; };
 		A4A25BCAB8513A9F4636745D /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
@@ -345,7 +345,11 @@
 					"@executable_path/Frameworks",
 				);
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -429,7 +433,11 @@
 					"@executable_path/Frameworks",
 				);
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

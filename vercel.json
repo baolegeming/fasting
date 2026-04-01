@@ -11,6 +11,11 @@
       "source": "/support/",
       "destination": "/support",
       "permanent": true
+    },
+    {
+      "source": "/privacy/",
+      "destination": "/privacy",
+      "permanent": true
     }
   ]
 }

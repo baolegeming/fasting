@@ -262,7 +262,8 @@ img {
 }
 
 .download-layout,
-.support-layout {
+.support-layout,
+.privacy-layout {
   display: grid;
   grid-template-columns: 1fr 420px;
   gap: 22px;
@@ -293,7 +294,8 @@ img {
 }
 
 .download-panel,
-.support-panel {
+.support-panel,
+.privacy-panel {
   padding: 24px;
 }
 
@@ -320,6 +322,54 @@ img {
   border-radius: 20px;
 }
 
+.policy-stack {
+  display: grid;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.policy-card h2 {
+  margin: 0 0 12px;
+  font-size: 26px;
+  letter-spacing: -0.03em;
+}
+
+.policy-card p,
+.policy-card li {
+  color: var(--muted);
+  line-height: 1.75;
+  font-size: 16px;
+}
+
+.policy-card ul {
+  margin: 0;
+  padding-left: 22px;
+}
+
+.policy-card li + li {
+  margin-top: 10px;
+}
+
+.policy-summary {
+  margin-top: 16px;
+  padding: 16px 18px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+}
+
+.policy-summary strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.policy-summary p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
 .footer {
   padding: 18px 0 42px;
   color: var(--muted);
@@ -339,6 +389,7 @@ img {
   .hero-grid,
   .download-layout,
   .support-layout,
+  .privacy-layout,
   .grid-3,
   .grid-2 {
     grid-template-columns: 1fr;
@@ -368,7 +419,8 @@ img {
   .hero-card,
   .card,
   .download-panel,
-  .support-panel {
+  .support-panel,
+  .privacy-panel {
     padding: 20px;
   }
 

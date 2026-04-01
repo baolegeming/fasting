@@ -479,6 +479,12 @@ CloudKit/SwiftData 的接入骨架已经在代码里：
 - 体重、反馈、同步偏好逐步并入 SwiftData
 - CloudKit 骨架接入
 
+### 9.9 上线落地页补齐
+
+- 官网已包含主页、下载页、技术支持页与隐私政策页
+- 隐私政策页按当前实际接入的 `AdMob / UMP`、`RevenueCat`、`iCloud / CloudKit` 能力编写
+- App Store Connect 里的隐私选项必须持续和真实接入的第三方 SDK 保持一致，尤其是广告与订阅相关数据披露
+
 ---
 
 ## 10. 分享增长项目现状
