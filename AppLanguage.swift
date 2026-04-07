@@ -27,8 +27,8 @@ enum AppLanguage: String, CaseIterable, Identifiable {
     }
 
     static func defaultValue(for locale: Locale = .current) -> AppLanguage {
-        let region = locale.region?.identifier.uppercased() ?? ""
-        return ["CN", "TW"].contains(region) ? .zh : .en
+        let languageCode = locale.language.languageCode?.identifier.lowercased() ?? ""
+        return languageCode.hasPrefix("zh") ? .zh : .en
     }
 
     static func resolved(from defaults: UserDefaults = .standard, locale: Locale = .current) -> AppLanguage {

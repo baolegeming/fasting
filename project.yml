@@ -50,11 +50,6 @@ targets:
           - UIInterfaceOrientationPortraitUpsideDown
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
-        UISupportedInterfaceOrientations~ipad:
-          - UIInterfaceOrientationPortrait
-          - UIInterfaceOrientationPortraitUpsideDown
-          - UIInterfaceOrientationLandscapeLeft
-          - UIInterfaceOrientationLandscapeRight
         GADApplicationIdentifier: $(FASTFLOW_GAD_APPLICATION_IDENTIFIER)
         FastFlowAdInventoryDefaultMode: $(FASTFLOW_AD_INVENTORY_DEFAULT_MODE)
         FastFlowHistoryNativeAdUnitID: $(FASTFLOW_ADMOB_HISTORY_NATIVE_UNIT_ID)

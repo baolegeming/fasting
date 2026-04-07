@@ -15,6 +15,7 @@ final class SubscriptionRuntime: ObservableObject {
     @Published private(set) var isLoading = false
     @Published private(set) var isPurchaseInFlight = false
     @Published private(set) var isProActive = false
+    @Published private(set) var hasLoadedOfferings = false
     @Published private(set) var monthlyPrice = "¥25"
     @Published private(set) var yearlyPrice = "¥158"
     @Published private(set) var lastErrorMessage: String?
@@ -75,6 +76,12 @@ final class SubscriptionRuntime: ObservableObject {
             return AppL10n.string("subscription.error.not_configured")
         }
 
+        guard isPlanAvailable(plan) else {
+            return hasLoadedOfferings
+                ? AppL10n.string("subscription.error.package_unavailable")
+                : AppL10n.string("subscription.error.offerings_loading")
+        }
+
         let package: Package?
         switch plan {
         case .monthly:
@@ -133,6 +140,15 @@ final class SubscriptionRuntime: ObservableObject {
     }
 
     #if canImport(RevenueCat)
+    func isPlanAvailable(_ plan: SubscriptionPlan) -> Bool {
+        switch plan {
+        case .monthly:
+            return monthlyPackage != nil
+        case .yearly:
+            return yearlyPackage != nil
+        }
+    }
+
     deinit {
         customerInfoTask?.cancel()
     }
@@ -179,10 +195,12 @@ final class SubscriptionRuntime: ObservableObject {
     }
 
     private func loadOfferings() async throws {
+        hasLoadedOfferings = false
         let offerings = try await Purchases.shared.offerings()
         guard let current = offerings.current else {
             monthlyPackage = nil
             yearlyPackage = nil
+            hasLoadedOfferings = true
             return
         }
 
@@ -195,6 +213,7 @@ final class SubscriptionRuntime: ObservableObject {
         if let yearlyPackage {
             yearlyPrice = yearlyPackage.storeProduct.localizedPriceString
         }
+        hasLoadedOfferings = true
     }
 
     private func apply(customerInfo: CustomerInfo, entitlementID: String) {

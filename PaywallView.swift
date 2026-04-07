@@ -3,6 +3,7 @@ import SwiftUI
 struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var subscriptionRuntime: SubscriptionRuntime
+    @EnvironmentObject private var languageStore: AppLanguageStore
     @AppStorage(FastFlowDefaultsKey.isPro) private var isPro = false
 
     @State private var selectedPlan: PaywallPlan = .yearly
@@ -10,6 +11,8 @@ struct PaywallView: View {
     @State private var alertMessage = ""
 
     private let primary = Color(hex: "ec5b13")
+    private let privacyURL = FastFlowLegalLinks.privacyPolicy
+    private let termsURL = FastFlowLegalLinks.termsOfUse
 
     var body: some View {
         NavigationStack {
@@ -20,10 +23,12 @@ struct PaywallView: View {
                     featureList
                     pricingCards
                     cta
+                    legal
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 24)
             }
+            .id(languageStore.language.rawValue)
             .background(Color(hex: "f8f6f6").ignoresSafeArea())
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -43,8 +48,8 @@ struct PaywallView: View {
                     await subscriptionRuntime.refreshSubscriptionState()
                 }
             }
-            .alert("购买提示", isPresented: $showingAlert) {
-                Button("确定", role: .cancel) {}
+            .alert(AppL10n.string("subscription.alert.title"), isPresented: $showingAlert) {
+                Button(AppL10n.string("subscription.alert.ok"), role: .cancel) {}
             } message: {
                 Text(alertMessage)
             }
@@ -71,13 +76,13 @@ struct PaywallView: View {
 
     private var headline: some View {
         VStack(spacing: 6) {
-            Text(AppL10n.string("FastFlow Pro"))
+            Text(AppL10n.string("paywall.title"))
                 .font(.system(size: 32, weight: .heavy))
                 .foregroundStyle(.black)
-            Text(AppL10n.string("为长期复盘和更深一层的断食洞察做准备"))
+            Text(AppL10n.string("paywall.subtitle"))
                 .font(.system(size: 18))
                 .foregroundStyle(.gray)
-            Text(AppL10n.string("当前核心计时与完整历史保持可用，Pro 会聚焦更深一层的复盘、洞察与后续高级能力。"))
+            Text(AppL10n.string("paywall.description"))
                 .font(.system(size: 13))
                 .foregroundStyle(.gray)
                 .multilineTextAlignment(.center)
@@ -89,24 +94,24 @@ struct PaywallView: View {
     private var featureList: some View {
         VStack(alignment: .leading, spacing: 0) {
             paywallFeatureRow(
-                title: AppL10n.string("Advanced history filters"),
-                detail: AppL10n.string("按时间、计划、结果和提前结束原因快速筛选历史记录。")
+                title: AppL10n.string("paywall.feature.history.title"),
+                detail: AppL10n.string("paywall.feature.history.body")
             )
             paywallFeatureRow(
-                title: AppL10n.string("Ad-free experience"),
-                detail: AppL10n.string("移除 History 和 Insights 中的广告位，保留更专注的使用体验。")
+                title: AppL10n.string("paywall.feature.ad_free.title"),
+                detail: AppL10n.string("paywall.feature.ad_free.body")
             )
             paywallFeatureRow(
-                title: AppL10n.string("Advanced insights"),
-                detail: AppL10n.string("更深一层的趋势、相关性和行为洞察会优先进入 Pro。")
+                title: AppL10n.string("paywall.feature.insights.title"),
+                detail: AppL10n.string("paywall.feature.insights.body")
             )
             paywallFeatureRow(
-                title: AppL10n.string("Early access to new Pro tools"),
-                detail: AppL10n.string("高级历史筛选和后续更深的复盘工具会逐步进入 Pro。")
+                title: AppL10n.string("paywall.feature.early_access.title"),
+                detail: AppL10n.string("paywall.feature.early_access.body")
             )
             paywallFeatureRow(
-                title: AppL10n.string("Support FastFlow"),
-                detail: AppL10n.string("帮助我们把 FastFlow 打磨成更好的轻断食陪伴产品。")
+                title: AppL10n.string("paywall.feature.support.title"),
+                detail: AppL10n.string("paywall.feature.support.body")
             )
         }
         .background(.white, in: RoundedRectangle(cornerRadius: 12))
@@ -137,20 +142,20 @@ struct PaywallView: View {
     private var pricingCards: some View {
         VStack(spacing: 12) {
             pricingCard(
-                title: AppL10n.string("Monthly"),
+                title: localizedMonthlyTitle,
                 price: subscriptionRuntime.monthlyPrice,
-                suffix: "/mo",
-                subtitle: AppL10n.string("Flexible billing"),
+                suffix: AppL10n.string("subscription.price_suffix.monthly"),
+                subtitle: localizedMonthlyDescription,
                 selected: selectedPlan == .monthly,
                 highlight: false
             ) {
                 selectedPlan = .monthly
             }
             pricingCard(
-                title: AppL10n.string("Yearly"),
+                title: localizedYearlyTitle,
                 price: subscriptionRuntime.yearlyPrice,
-                suffix: "/yr",
-                subtitle: AppL10n.string("Lower annual cost"),
+                suffix: AppL10n.string("subscription.price_suffix.yearly"),
+                subtitle: localizedYearlyDescription,
                 selected: selectedPlan == .yearly,
                 highlight: true
             ) {
@@ -171,12 +176,12 @@ struct PaywallView: View {
         Button(action: onTap) {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
-                    Text(title.uppercased())
-                        .font(.system(size: 12, weight: .bold))
+                    Text(title)
+                        .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(highlight ? primary : .gray)
                     Spacer()
                     if highlight {
-                        Text(AppL10n.string("BEST VALUE"))
+                        Text(AppL10n.string("paywall.badge.best_value"))
                             .font(.system(size: 10, weight: .bold))
                             .foregroundStyle(.white)
                             .padding(.horizontal, 8)
@@ -195,6 +200,7 @@ struct PaywallView: View {
                 Text(subtitle)
                     .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(highlight ? primary : .gray)
+                    .multilineTextAlignment(.leading)
             }
             .padding(16)
             .background(
@@ -210,30 +216,62 @@ struct PaywallView: View {
 
     private var cta: some View {
         VStack(spacing: 12) {
+            if !subscriptionRuntime.hasLoadedOfferings {
+                HStack(spacing: 8) {
+                    ProgressView()
+                        .tint(primary)
+                    Text(AppL10n.string("subscription.offerings.loading"))
+                        .font(.system(size: 13))
+                        .foregroundStyle(.gray)
+                }
+            }
+
             Button {
                 Task {
                     await startPurchase()
                 }
             } label: {
-                Text(AppL10n.string("加入 FastFlow Pro"))
+                Text(subscriptionRuntime.isPurchaseInFlight
+                     ? AppL10n.string("subscription.purchase.in_progress")
+                     : AppL10n.string("paywall.cta.join"))
                     .font(.system(size: 19, weight: .bold))
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 15)
                     .background(primary, in: RoundedRectangle(cornerRadius: 12))
             }
+            .disabled(!selectedPlanAvailable || subscriptionRuntime.isPurchaseInFlight)
+            .opacity((!selectedPlanAvailable || subscriptionRuntime.isPurchaseInFlight) ? 0.65 : 1)
 
             HStack(spacing: 6) {
-                Text(AppL10n.string("部分 Pro 能力会随版本逐步开放 ·"))
+                Text(AppL10n.string("paywall.cta.rollout_notice"))
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(.gray)
-                Button(AppL10n.string("恢复购买")) {
+                Button(AppL10n.string("paywall.cta.restore")) {
                     restorePurchase()
                 }
                 .font(.system(size: 12, weight: .bold))
                 .foregroundStyle(.gray)
+                .disabled(subscriptionRuntime.isPurchaseInFlight)
             }
         }
+    }
+
+    private var legal: some View {
+        VStack(spacing: 10) {
+            Text(AppL10n.string("subscription.legal.notice"))
+                .font(.system(size: 12))
+                .foregroundStyle(.gray)
+                .multilineTextAlignment(.center)
+
+            HStack(spacing: 16) {
+                Link(AppL10n.string("subscription.legal.privacy"), destination: privacyURL)
+                Link(AppL10n.string("subscription.legal.terms"), destination: termsURL)
+            }
+            .font(.system(size: 13, weight: .semibold))
+            .tint(primary)
+        }
+        .frame(maxWidth: .infinity)
     }
 
     private func startPurchase() async {
@@ -264,11 +302,41 @@ struct PaywallView: View {
             }
         }
     }
+
+    private var selectedPlanAvailable: Bool {
+        subscriptionRuntime.isPlanAvailable(selectedPlan == .yearly ? .yearly : .monthly)
+    }
+
+    private var localizedMonthlyTitle: String {
+        _ = languageStore.language
+        return AppL10n.string("subscription.plan.monthly.title")
+    }
+
+    private var localizedYearlyTitle: String {
+        _ = languageStore.language
+        return AppL10n.string("subscription.plan.yearly.title")
+    }
+
+    private var localizedMonthlyDescription: String {
+        _ = languageStore.language
+        return AppL10n.string("subscription.plan.monthly.description")
+    }
+
+    private var localizedYearlyDescription: String {
+        _ = languageStore.language
+        return AppL10n.string("subscription.plan.yearly.description")
+    }
 }
 
 private enum PaywallPlan {
     case monthly
     case yearly
+}
+
+private enum FastFlowLegalLinks {
+    // Keep this in sync with the Privacy Policy URL configured in App Store Connect.
+    static let privacyPolicy = URL(string: "https://fasting-nu.vercel.app/privacy")!
+    static let termsOfUse = URL(string: "https://www.apple.com/legal/macapps/stdeula/")!
 }
 
 #Preview {
